@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 //DB Handler
 import db from './db/dbConnection.js'
@@ -9,7 +10,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app=express();
-app.use(cors());
+
+app.use(cors({
+    origin:'http://localhost:5173',
+    credentials:true,
+}));
+
+app.use(cookieParser(process.env.COOKIE_SECRET))
 app.use(express.json());
 
 const port=process.env.PORT;

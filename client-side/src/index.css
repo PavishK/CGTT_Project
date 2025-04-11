@@ -1,1 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Orbitron:wght@400..900&display=swap');
 @import "tailwindcss";
+@tailwind utilities;
+
+
+::-webkit-scrollbar{
+    display: none;
+}
+
+@theme{
+    --color-bglight:#ffffff;
+    --color-textlight:#24292f;
+    --color-accentlight:#93c5fd;
+
+    --color-bgdark:#282a36;
+    --color-textdark:#f8f8f2;
+    --color-accentdark:#bd93f9;
+    --font-nunito:Nunito, 'sans-serif';
+
+    --width-input:470px;
+    --width-input-text:500px;
+}
+
+
+:root{
+    @apply font-nunito text-textlight bg-bglight
+}
+
+.animate-float{
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float{
+    0%,100%{
+        transform: translateY(0);
+    }
+    50%{
+        transform: translateY(-15px);
+    }
+}
+
+
+@layer utilities {
+  @keyframes step-box {
+    0%, 100% {
+      transform: translateY(0);
+      opacity: 0.4;
+    }
+    50% {
+      transform: translateY(-16px);
+      opacity: 1;
+    }
+  }
+
+  .animate-step-box {
+    animation: step-box 1s ease-in-out infinite;
+  }
+}
