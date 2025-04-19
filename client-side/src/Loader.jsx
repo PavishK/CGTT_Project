@@ -21,12 +21,13 @@ const LoaderOverlay = ({ loading }) => {
         ${loading ? "opacity-100" : "opacity-0"}
       `}
     >
-      <div className="flex gap-2">
-        <div className="w-4 h-4 bg-white rounded-sm animate-step-box [animation-delay:0s]"></div>
-        <div className="w-4 h-4 bg-white rounded-sm animate-step-box [animation-delay:0.25s]"></div>
-        <div className="w-4 h-4 bg-white rounded-sm animate-step-box [animation-delay:0.5s]"></div>
-        <div className="w-4 h-4 bg-white rounded-sm animate-step-box [animation-delay:0.75s]"></div>
+      <div className="flex gap-2 animate-pulse duration-75 border-b-4 border-b-white rounded-b-sm p-1">
+        <div className="w-4 h-4 bg-white rounded-sm  duration-300 animate-spin"></div>
+        <div className="w-4 h-4 bg-white rounded-sm  duration-300 animate-bounce"></div>
+        <div className="w-4 h-4 bg-white rounded-sm  duration-100 animate-spin"></div>
+        <div className="w-4 h-4 bg-white rounded-sm  duration-100 animate-bounce"></div>
       </div>
+
     </div>
   );
 };

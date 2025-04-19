@@ -2,7 +2,7 @@ import db from '../db/dbConnection.js'
 import { hashPassword, verifyPassword } from '../middlewares/passwordMiddleware.js';
 import {generateJWTWebToken} from '../middlewares/JWTMiddleware.js';
 
-const cookiesConfig={httpOnly:true,secure:false,maxAge:2 * 60 * 60 * 1000, signed:true};
+const cookiesConfig={httpOnly:true,secure:true,maxAge:2 * 60 * 60 * 1000, signed:true};
 
 import axios from 'axios';
 
@@ -63,7 +63,7 @@ export const userRegistration = async (req, res) => {
         const token = generateJWTWebToken({ _id, name, email, role });
         res.cookie("jwttoken", token, cookiesConfig);
 
-        return res.status(201).json({ message: "User registered Successfully!" });
+        return res.status(201).json({ message: "User registered Successfully!",user_data:{_id:_id,name:name,email:email,role:role},path:"/home" });
       });
     });
   } catch (error) {
@@ -102,7 +102,7 @@ export const userLogin=(req,res)=>{
 
       const {_id,name,email,role}=userData;
       res.cookie("jwttoken",generateJWTWebToken({_id:_id,name:name,email:email,role:role}),cookiesConfig);
-      return res.status(201).json({message:"User Verified Successfully!"});
+      return res.status(201).json({message:"User Verified Successfully!",user_data:{_id:_id,name:name,email:email,role:role}, path:"/home"});
     });
     
   } catch (error) {

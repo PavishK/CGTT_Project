@@ -1,7 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Loader from '../Loader';
+import { storeUserData } from '../service/StorageService';
 
 function LoginRegister() {
     const [loginData, setLoginData] = useState({ userID: '', password: '' });
@@ -11,6 +13,7 @@ function LoginRegister() {
 
     const [toggleForm, setToggleForm] = useState(true);
     const [makeLoading,setMakeLoading]=useState(false);
+    const navigate=useNavigate(null);
 
 
     const turnstileRef = useRef(null);
@@ -37,9 +40,11 @@ function LoginRegister() {
 
         try {
             const res = await axios.post(api + "/api/user/login", data, { withCredentials: true });
-            console.log(res);
+            //console.log(res);
             setMakeLoading(false);
-            MakeToast('success','Login successful!')
+            MakeToast('success','Login successful!');
+            storeUserData(res.data.user_data);
+            navigate(res.data.path);
         } catch (error) {
             setMakeLoading(false);
             MakeToast('error',error.response.data.message);
@@ -77,6 +82,8 @@ function LoginRegister() {
             console.log(res);
             setMakeLoading(false);
             MakeToast('success','Registered successfully!');
+            storeUserData(res.data.user_data);
+            navigate(res.data.path);
         } catch (error) {
             setMakeLoading(false);
             MakeToast('error',error.response.data.message);

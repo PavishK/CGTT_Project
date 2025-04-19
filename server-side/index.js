@@ -33,3 +33,8 @@ app.listen(port,()=>{
 
 import userRouter from './routes/userRouter.js';
 app.use('/api/user',userRouter);
+
+//Session Handler
+
+import sessionRouter from './routes/sessionRouter.js';
+app.use('/api/protect',sessionRouter);

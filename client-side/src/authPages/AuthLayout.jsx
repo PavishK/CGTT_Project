@@ -34,7 +34,7 @@ function AuthLayout() {
 </div>
 
   </div>
-    <div className='w-full h-screen  rounded-xl border-2 border-black flex items-center justify-normal sm:justify-center flex-col'>
+    <div className='w-full h-screen  rounded-xl border-2 border-black flex items-center justify-normal gap-y-6 sm:gap-y-0 sm:justify-center flex-col'>
     <img src={TTLogo} className='w-80 rounded-full  sm:hidden'/>
     <LoginRegister/>
     </div>
