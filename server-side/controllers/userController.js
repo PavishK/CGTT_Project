@@ -63,7 +63,7 @@ export const userRegistration = async (req, res) => {
         const token = generateJWTWebToken({ _id, name, email, role });
         res.cookie("jwttoken", token, cookiesConfig);
 
-        return res.status(201).json({ message: "User registered Successfully!",user_data:{_id:_id,name:name,email:email,role:role},path:"/home" });
+        return res.status(201).json({ message: "User registered Successfully!",user_data:{_id:_id,name:name,email:email,role:role},path:"/" });
       });
     });
   } catch (error) {
@@ -102,7 +102,7 @@ export const userLogin=(req,res)=>{
 
       const {_id,name,email,role}=userData;
       res.cookie("jwttoken",generateJWTWebToken({_id:_id,name:name,email:email,role:role}),cookiesConfig);
-      return res.status(201).json({message:"User Verified Successfully!",user_data:{_id:_id,name:name,email:email,role:role}, path:"/home"});
+      return res.status(201).json({message:"User Verified Successfully!",user_data:{_id:_id,name:name,email:email,role:role}, path:"/"});
     });
     
   } catch (error) {

@@ -96,23 +96,32 @@ function LoginRegister() {
 
         if(registerData.name=="" || registerData.email=="" || registerData.password=="" ||registerData.confirm_password==""){
             MakeToast('error','Please fill in all the fields.');
+            setMakeLoading(false);
             return;
         }
 
         if(!/^[a-zA-Z][a-zA-Z0-9_]{4,}$/.test(registerData.name)){
             MakeToast('error','Invalid name format!');
+            setMakeLoading(false);
+            return;
         }
 
         if(/^S+@\S.\S+$/.test(registerData.email)){
             MakeToast('error','Invalid email format!');
+            setMakeLoading(false);
+            return;
         }
 
         if (registerData.password.length < 8 || registerData.password.length > 15) {
             MakeToast('error','Password should be between 8 and 15 characters.');
+            setMakeLoading(false);
+            return;
         }
 
         if(registerData.password!=registerData.confirm_password){
             MakeToast('error','Invalid confirm password!');
+            setMakeLoading(false);
+            return;
         }
 
         setMakeLoading(false);
@@ -159,8 +168,8 @@ function LoginRegister() {
             {toggleForm ? (
                 <div className='w-full flex items-center justify-center flex-col gap-y-1.5 mt-3'>
                     <form onSubmit={onLoginFormSubmit} className='w-full p-2 flex items-center justify-center flex-col gap-y-4'>
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type='text' name='userID' placeholder='Enter your name or email' value={loginData.userID} onChange={handleLoginInputChange} autoComplete='username' required />
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type={showLoginPassword ? 'text' : 'password'} name='password' placeholder='Enter your password' value={loginData.password} onChange={handleLoginInputChange} autoComplete='current-password' required />
+                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type='text' name='userID' placeholder='Enter your name or email' value={loginData.userID} onChange={handleLoginInputChange} id='username' autoComplete='username' required />
+                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type={showLoginPassword ? 'text' : 'password'} name='password' placeholder='Enter your password' value={loginData.password} onChange={handleLoginInputChange}  id='password' autoComplete='current-password' required />
                         <div className='w-full sm:w-input flex items-center justify-between flex-row sm:text-lg'>
                             <p><input type='checkbox' checked={showLoginPassword} onChange={(e) => setShowLoginPassword(e.target.checked)} /> Show password</p>
                             <p className='text-gray-500 cursor-pointer hover:text-gray-400'>Forgot password?</p>
