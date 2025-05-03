@@ -6,6 +6,9 @@ import axios from 'axios';
 import Loader from '../Loader.jsx';
 import '../index.css';
 import Sidebar, { SidebarItem } from "./SideBar.jsx"
+import { useSelector, useDispatch } from 'react-redux';
+import { setExpanded } from '../redux/ExpandedSlicer.jsx';
+import { useLocation } from 'react-router-dom';
 
 import {
   Home,
@@ -16,17 +19,45 @@ import {
   User, 
   HelpCircle,
   UserCog,
+  Verified,
 } from "lucide-react";
 
 function MainLayout() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({ name: 'gojo', email: 'gojo@gmail.com' ,id:'001',role:'user',status:false});
+  const dispatch=useDispatch();
+  const location=useLocation();
+
+  const [userData, setUserData] = useState({ name: 'gojo', email: 'gojo@gmail.com' ,id:'001',role:"admin",status:false});
   const apiUrl = import.meta.env.VITE_SERVER_API;
   const [makeLoading,setMakeLoading]=useState(false);
+  const expanded=useSelector((state)=>state.expanded);
+  const [selectedPath,setSelectedPath]=useState({});
+
+  const PageNavData=[
+    {name:"Home",path:'/',icon:<Home size={26}/>},
+    {name:"Courses",path:'/courses',icon:<BookOpen size={26}/>},
+    {name:"Submissions",path:'/submissions',icon:<ClipboardCheck size={26}/>},
+    {name:"Certificates",path:'/certificates',icon:<BadgeCheck size={26}/>},
+    {name:"Verify Certificates",path:'/verify-certificates',icon:<ShieldCheck size={26}/>},
+    {name:"Profile",path:'/profile',icon:<User size={26}/>},
+    {name:"Help",path:'/help',icon:<HelpCircle size={26}/>},
+  ];
 
   const MakeLoading=()=>{
     setMakeLoading(true);
     setTimeout(()=>{setMakeLoading(false)},1000);
+  }
+
+  const onSideNavClicked=()=>{
+    dispatch(setExpanded());
+    MakeLoading();
+    window.location.reload();
+  }
+
+  const MakeNavigationAction=()=>{
+    let currentPath=window.location.pathname;
+    setSelectedPath(PageNavData.filter((item)=>item.path==currentPath)[0]);
+    console.log(selectedPath);
   }
 
   useEffect(() => {
@@ -50,8 +81,9 @@ function MainLayout() {
 
     MakeLoading();
     sessionCheck();
+    MakeNavigationAction();
     
-  }, [apiUrl]);
+  }, [apiUrl,location]);
 
 
 
@@ -120,11 +152,28 @@ function MainLayout() {
           
         {/* Pages */}
     
-        <div className="flex-1 p-0 overflow-auto h-full">
-          <Outlet />
+        <div className={`flex-1 p-0 overflow-auto h-full sm:block  ${expanded? 'hidden':'block'}
+          `}>
+
+          <h1 className='flex items-center justify-normal'>{selectedPath.icon}
+          <span className='text-2xl p-1 font-bold text-black'>{selectedPath.name}</span>
+          </h1>
+
+          <div className={`w-full h-screen border overflow-y-auto p-2 rounded-lg`}>
+            <Outlet />
+          </div>
+         
         </div>
 
-    
+        <div className={`w-auto text-justify mt-96 flex items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden 
+        ${expanded?'block':'hidden'}
+        `} onClick={onSideNavClicked}>
+        
+        {selectedPath.icon}
+        {selectedPath.name}  
+  
+        </div>
+
         </div>
         <Loader loading={makeLoading}/>
        </>

@@ -7,32 +7,19 @@ import toast from "react-hot-toast";
 import { removeUserData } from "../service/StorageService.jsx";
 import axios from 'axios';
 import { LogIn, LogOut } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
-import { setExpanded } from "../redux/ExpandedSlicer.jsx";
 
 
 const SidebarContext = createContext()
 
-export default function Sidebar({ children, user_data }) {
+export default function AdminSideBar({ children, user_data }) {
 
   const navigate=useNavigate(null);
-
-  const currentAction=    useSelector((state)=>state.expanded)
-  const [expanded, setExpandedAction] = useState(currentAction);
-  const dispatch=useDispatch();
-
+  const [expanded, setExpanded] = useState(false);
   const [makeLoading,setMakLoading]=useState(false);
   const apiUrl = import.meta.env.VITE_SERVER_API;
 
   const onLogInClicked=()=>{
     navigate('/user-login_register')
-  }
-
-  const toggleExpanded=()=>{
-    dispatch(setExpanded());
-    setExpandedAction(
-      !expanded
-    );
   }
 
   const onLogOutClicked=async()=>{
@@ -63,7 +50,7 @@ export default function Sidebar({ children, user_data }) {
             alt="Logo"
           />
           <button
-            onClick={()=>toggleExpanded()}
+            onClick={() => setExpanded((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer"
           >
             {expanded ? <ChevronLeft /> : <ChevronRight />}
@@ -91,7 +78,7 @@ export default function Sidebar({ children, user_data }) {
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold text-black">{user_data.name}</h4>
+              <h4 className="font-semibold text-black">{user_data.name+" ("+user_data.role+")"}</h4>
               <span className="text-xs text-gray-500">{user_data.email}</span>
             </div>
             <LogOut size={20} className="text-red-600 cursor-pointer" onClick={onLogOutClicked}/>

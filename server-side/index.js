@@ -38,3 +38,8 @@ app.use('/api/user',userRouter);
 
 import sessionRouter from './routes/sessionRouter.js';
 app.use('/api/protect',sessionRouter);
+
+//Course Handeler
+
+import courseHandler from './routes/courseRouter.js';
+app.use('/api/course',courseHandler);
