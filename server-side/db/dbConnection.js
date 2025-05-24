@@ -11,6 +11,7 @@ const db=mysql.createConnection({
     password:process.env.PASSWORD,
     database:process.env.DATABASE,
     port:process.env.DBPORT,
+    multipleStatements:true,
 });
 
 db.connect((err)=>{

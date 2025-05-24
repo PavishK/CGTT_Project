@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-
+import timestamp from './time_stamp.js';
 //DB Handler
 import db from './db/dbConnection.js'
 
@@ -26,7 +26,7 @@ app.get('/',(req,res)=>{
 });
 
 app.listen(port,()=>{
-    console.log("Server is running on http://localhost:"+port);
+    timestamp(port);
 });
 
 //User Handeling
@@ -43,3 +43,13 @@ app.use('/api/protect',sessionRouter);
 
 import courseHandler from './routes/courseRouter.js';
 app.use('/api/course',courseHandler);
+
+//Task Handler
+
+import taskRouter from './routes/taskRouter.js'
+app.use('/api/task',taskRouter);
+
+//Admin Handler
+
+import adminRouter from './routes/adminRouter.js';
+app.use('/api/admin',adminRouter);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { getUserData, storeUserData } from '../service/StorageService';
+import { getUserData, storeUserData,removeUserData } from '../service/StorageService';
 import { toast } from 'react-hot-toast';
 import axios from 'axios';
 import Loader from '../Loader.jsx';
@@ -19,15 +19,16 @@ import {
   User, 
   HelpCircle,
   UserCog,
-  Verified,
+  ChevronRight,
 } from "lucide-react";
 
 function MainLayout() {
-  const navigate = useNavigate();
+
   const dispatch=useDispatch();
   const location=useLocation();
+  const navigate=useNavigate(null) 
 
-  const [userData, setUserData] = useState({ name: 'gojo', email: 'gojo@gmail.com' ,id:'001',role:"admin",status:false});
+  const [userData, setUserData] = useState({});
   const apiUrl = import.meta.env.VITE_SERVER_API;
   const [makeLoading,setMakeLoading]=useState(false);
   const expanded=useSelector((state)=>state.expanded);
@@ -36,12 +37,17 @@ function MainLayout() {
   const PageNavData=[
     {name:"Home",path:'/',icon:<Home size={26}/>},
     {name:"Courses",path:'/courses',icon:<BookOpen size={26}/>},
+    {name:"Courses",subName:location?.state?.title?? '',path:`/selected-course`,icon:<BookOpen size={26}/>},
     {name:"Submissions",path:'/submissions',icon:<ClipboardCheck size={26}/>},
     {name:"Certificates",path:'/certificates',icon:<BadgeCheck size={26}/>},
     {name:"Verify Certificates",path:'/verify-certificates',icon:<ShieldCheck size={26}/>},
     {name:"Profile",path:'/profile',icon:<User size={26}/>},
     {name:"Help",path:'/help',icon:<HelpCircle size={26}/>},
   ];
+
+  const onNavInfoClicked=()=>{
+    navigate(-1);
+  }
 
   const MakeLoading=()=>{
     setMakeLoading(true);
@@ -55,9 +61,8 @@ function MainLayout() {
   }
 
   const MakeNavigationAction=()=>{
-    let currentPath=window.location.pathname;
+    let currentPath="/"+window.location.pathname.split('/')[1];
     setSelectedPath(PageNavData.filter((item)=>item.path==currentPath)[0]);
-    console.log(selectedPath);
   }
 
   useEffect(() => {
@@ -75,6 +80,7 @@ function MainLayout() {
         if(error.status===401){
           toast.error(error?.response?.data?.message);
         }
+        removeUserData();
         setMakeLoading(false);
       }
     };
@@ -83,7 +89,7 @@ function MainLayout() {
     sessionCheck();
     MakeNavigationAction();
     
-  }, [apiUrl,location]);
+  }, [location]);
 
 
 
@@ -152,11 +158,20 @@ function MainLayout() {
           
         {/* Pages */}
     
-        <div className={`flex-1 p-0 overflow-auto h-full sm:block  ${expanded? 'hidden':'block'}
-          `}>
+        <div className={`flex-1 p-0 overflow-auto h-full sm:block  ${expanded? 'hidden':'block'}`}>
 
           <h1 className='flex items-center justify-normal'>{selectedPath.icon}
-          <span className='text-2xl p-1 font-bold text-black'>{selectedPath.name}</span>
+          <span className={`text-2xl p-1 font-bold text-black cursor-pointer
+          ${selectedPath?.subName?'font-medium text-xl':''}
+          `} onClick={()=>onNavInfoClicked()}>{selectedPath.name}</span>
+          {selectedPath?.subName && (
+            <span className=' flex items-center justify-normal text-xl font-semibold text-black capitalize gap-x-1'>
+            <ChevronRight size={20}/>
+            <span className='whitespace-nowrap overflow-hidden text-ellipsis w-40 sm:w-auto'>
+            {selectedPath.subName}  
+            </span>
+            </span>
+          )}
           </h1>
 
           <div className={`w-full h-screen border overflow-y-auto p-2 rounded-lg`}>

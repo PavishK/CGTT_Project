@@ -4,22 +4,39 @@ import {
   SearchX,
   Lock,
   Unlock,
+  GraduationCap,
+  Lightbulb,
+  FileText,
+  TrendingUp,
+  CornerDownLeft
 } from 'lucide-react';
 import Sample from '../assets/images/login_main.svg';
 import Loader from '../Loader.jsx';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { getUserData } from '../service/StorageService.jsx';
+import {useNavigate} from 'react-router-dom';
 
 function Courses() {
 
   const [searchText,setSearchText]=useState('');
   const [coursesData,setCoursesData]=useState([]);
+  const [listCourses,setListCourses]=useState([]);
   const [filteredCourseData,setFilteredCourseData]=useState([]);
   const [enrolledCourseData,setEnrolledCourseData]=useState([]);
   const [makeLoading,setMakeLoading]=useState(false);
   const [userData,setUserData]=useState({});
+
+  const navigate=useNavigate(null);
   const apiUrl=import.meta.env.VITE_SERVER_API;
+
+  const onClickSelectedCourse=(data)=>{
+    alert("Enroll now!");
+  }
+
+  const onEnrolledCourseClicked=(data)=>{
+    navigate(`/selected-course/${data.title}`,{state:data})
+  }
 
   useEffect(() => {
     const filtered = searchText.trim().length === 0
@@ -61,6 +78,7 @@ function Courses() {
         const res = await axios.get(apiUrl + "/api/course/list-courses");
         setCoursesData(res.data.data);
         setFilteredCourseData(res.data.data);
+        setListCourses(res.data.data.map((ele)=>ele.title))
         setMakeLoading(false);
       } catch (error) {
         toast.error("Unable to load courses");
@@ -76,7 +94,14 @@ function Courses() {
     <div className='flex items-start justify-start flex-col px-0.5 mt-3'>
     <div className='flex items-center justify-start p-2 w-fit  sm:w-9/12 gap-x-0.5 flex-row border rounded-lg self-center'>
     <Search size={23} color='#9B9497'/>
-    <input type='text' value={searchText} onChange={(e)=>setSearchText(e.target.value)} className='w-full p-1  rounded-lg text-lg focus:outline-none' placeholder='Search'/>
+    <input type='text' list='courses' name='courseLists' value={searchText} onChange={(e)=>setSearchText(e.target.value)} className='w-full p-1  rounded-lg text-lg focus:outline-none' placeholder='Search'/>
+
+    <datalist id='courses'>
+    {listCourses.map((val,i)=>(
+      <option value={val} key={i}/>
+    ))}
+    </datalist>
+
     </div>
 
       {/* All Courses */}
@@ -88,7 +113,7 @@ function Courses() {
 
     <div className='mt-5 w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-y-4 gap-x-6'>
       {filteredCourseData.map((item,index)=>(
-        <div className='border w-auto sm:w-auto h-72 rounded-lg transition-transform ease-out hover:scale-105' key={index}>
+        <div className='border w-auto sm:w-auto h-80 rounded-lg transition-transform ease-out hover:scale-105 cursor-pointer' key={index} onClick={()=>onClickSelectedCourse(item)}>
       <img src={Sample} className='w-full h-40 bg-gray-100'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>
@@ -96,7 +121,13 @@ function Courses() {
         <Lock size={22}/>
         </div>
       </div>
-      <p className='p-1.5'>{item.description}</p>
+      <p className='p-1.5 w-auto h-20 overflow-scroll cursor-all-scroll'>{item.description}</p>
+      <div className='p-1.5 flex items-center justify-normal gap-x-1.5 self-end w-auto'>
+        <GraduationCap/>
+        <Lightbulb/>
+        <FileText/>
+        <TrendingUp/>
+      </div>
       </div>
       ))}
 
@@ -121,7 +152,7 @@ function Courses() {
       <h1 className='text-lg mt-3 font-bold'>Enrolled Courses ({enrolledCourseData.length})</h1>
       <div className='mt-5 w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-3 gap-y-4 gap-x-6'>
       {enrolledCourseData.map((item,index)=>(
-        <div className='border w-auto sm:w-auto h-72 rounded-lg transition-transform ease-out hover:scale-105' key={index}>
+        <div className='border w-auto sm:w-auto h-72 rounded-lg transition-transform ease-out hover:scale-105 cursor-pointer' key={index} onClick={()=>onEnrolledCourseClicked(item)}>
       <img src={Sample} className='w-full h-40 bg-gray-100'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>

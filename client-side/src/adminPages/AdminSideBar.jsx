@@ -7,19 +7,31 @@ import toast from "react-hot-toast";
 import { removeUserData } from "../service/StorageService.jsx";
 import axios from 'axios';
 import { LogIn, LogOut } from "lucide-react";
-
+import { useSelector, useDispatch } from "react-redux";
+import { setExpanded } from "../redux/ExpandedSlicer.jsx";
 
 const SidebarContext = createContext()
 
 export default function AdminSideBar({ children, user_data }) {
 
-  const navigate=useNavigate(null);
-  const [expanded, setExpanded] = useState(false);
+    const navigate=useNavigate(null);
+
+  const currentAction=    useSelector((state)=>state.expanded)
+  const [expanded, setExpandedAction] = useState(currentAction);
+  const dispatch=useDispatch();
+
   const [makeLoading,setMakLoading]=useState(false);
   const apiUrl = import.meta.env.VITE_SERVER_API;
 
   const onLogInClicked=()=>{
     navigate('/user-login_register')
+  }
+
+  const toggleExpanded=()=>{
+    dispatch(setExpanded());
+    setExpandedAction(
+      !expanded
+    );
   }
 
   const onLogOutClicked=async()=>{
@@ -50,7 +62,7 @@ export default function AdminSideBar({ children, user_data }) {
             alt="Logo"
           />
           <button
-            onClick={() => setExpanded((curr) => !curr)}
+            onClick={()=>toggleExpanded()}
             className="p-1.5 rounded-lg bg-gray-100 hover:bg-gray-200 cursor-pointer"
           >
             {expanded ? <ChevronLeft /> : <ChevronRight />}
@@ -63,9 +75,9 @@ export default function AdminSideBar({ children, user_data }) {
         </SidebarContext.Provider>
 
 
-        {/* Footer User Info */}
+{/* Footer User Info */}
 
-        {user_data.status?(
+        {user_data?.status?(
           <div className="border-t relative flex items-center py-2 px-1 sm:px-3 my-1
         font-medium rounded-md cursor-pointer transition-colors group">
           
@@ -78,7 +90,7 @@ export default function AdminSideBar({ children, user_data }) {
             }`}
           >
             <div className="leading-4">
-              <h4 className="font-semibold text-black">{user_data.name+" ("+user_data.role+")"}</h4>
+              <h4 className="font-semibold text-black">{user_data.name}</h4>
               <span className="text-xs text-gray-500">{user_data.email}</span>
             </div>
             <LogOut size={20} className="text-red-600 cursor-pointer" onClick={onLogOutClicked}/>
@@ -131,8 +143,6 @@ export default function AdminSideBar({ children, user_data }) {
 
         </div>
         )}
-
-
       </nav>
       <Loader loading={makeLoading}/>
     </aside>
@@ -172,7 +182,7 @@ export function SidebarItem({ icon, text, active, alert }) {
 
       {!expanded && (
         <div
-          className={`
+          className={`whitespace-nowrap
             absolute left-full rounded-md px-2 py-1 ml-6
             bg-gray-100 text-black text-sm
             invisible opacity-0 -translate-x-3 transition-all

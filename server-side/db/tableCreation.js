@@ -9,8 +9,8 @@ export const createUserTable=()=>{
         _id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(225) NOT NULL,
         email VARCHAR(225) UNIQUE,
+        role ENUM('user','admin') DEFAULT 'user',
         password_hash VARCHAR(225) NOT NULL,
-        phone_number INT(10),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     `,(err,result)=>{
@@ -42,6 +42,7 @@ export const createUserTable=()=>{
                 user_id INT,
                 course_id INT,
                 enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                course_completed BOOLEAN DEFAULT FALSE,
                 UNIQUE (user_id, course_id),
                 FOREIGN KEY (user_id) REFERENCES users(_id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
@@ -51,6 +52,22 @@ export const createUserTable=()=>{
                 console.log("Unable to create Enrolled table!");
             else
                 console.log("Enrollments table created successfully!");
+        });
+
+                db.query(`
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                course_id INT,
+                title VARCHAR(100),
+                description TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (course_id) REFERENCES courses(id)
+            );
+        `, (err, result) => {
+            if (err)
+                console.log("Unable to create Tasks table!");
+            else
+                console.log("Tasks table created successfully!");
         });
         
 
