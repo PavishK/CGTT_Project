@@ -41,8 +41,10 @@ export const createUserTable=()=>{
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 user_id INT,
                 course_id INT,
+                enrollment_status BOOLEAN DEFAULT FALSE,
                 enrolled_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 course_completed BOOLEAN DEFAULT FALSE,
+                completed_at TIMESTAMP DEFAULT NULL,
                 UNIQUE (user_id, course_id),
                 FOREIGN KEY (user_id) REFERENCES users(_id),
                 FOREIGN KEY (course_id) REFERENCES courses(id)
@@ -69,6 +71,24 @@ export const createUserTable=()=>{
             else
                 console.log("Tasks table created successfully!");
         });
-        
 
+        db.query(`
+            CREATE TABLE IF NOT EXISTS certificates (
+            ref INT PRIMARY KEY AUTO_INCREMENT,
+            user_id INT,
+            course_id INT,
+            enrollment_id INT,
+            is_valid BOOLEAN DEFAULT TRUE,
+            issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            cid VARCHAR(25) UNIQUE, 
+            FOREIGN KEY (user_id) REFERENCES users(_id),
+            FOREIGN KEY (course_id) REFERENCES courses(id),
+            FOREIGN KEY (enrollment_id) REFERENCES enrollments(id)
+            );
+            `,(err,result)=>{
+            if (err)
+                console.log("Unable to create Certificates table!");
+            else
+                console.log("Certificates table created successfully!");
+            });
 } 

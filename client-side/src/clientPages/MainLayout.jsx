@@ -113,18 +113,13 @@ function MainLayout() {
           <SidebarItem icon={<BookOpen size={20} />} text="Courses" active={isActive} />
         )}
       </NavLink>
-
+      
+      {userData.status?
       <NavLink to="/submissions">
         {({ isActive }) => (
           <SidebarItem icon={<ClipboardCheck size={20} />} text="Submissions" active={isActive} />
         )}
-      </NavLink>
-
-      <NavLink to="/certificates">
-        {({ isActive }) => (
-          <SidebarItem icon={<BadgeCheck size={20} />} text="Certificates" active={isActive} />
-        )}
-      </NavLink>
+      </NavLink>:null}
 
       <NavLink to="/verify-certificates">
         {({ isActive }) => (

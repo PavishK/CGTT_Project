@@ -6,7 +6,6 @@ import MainLayout from './clientPages/MainLayout.jsx'
 import Home from './clientPages/Home.jsx'
 import Courses from './clientPages/Courses.jsx';
 import MySubmissions from './clientPages/MySubmissions.jsx';
-import Certificates from './clientPages/Certificates.jsx';
 import Verify from './clientPages/Verify.jsx';
 import AuthLayout from './authPages/AuthLayout.jsx'
 import Profile from './clientPages/Profile.jsx';
@@ -29,7 +28,6 @@ function App() {
         <Route path='/courses' element={<Courses/>}/>
         <Route path='/selected-course/:title' element={<SelectedCourse/>}/>
         <Route path='/submissions' element={<MySubmissions/>}/>
-        <Route path='/certificates' element={<Certificates/>}/>
         <Route path='/verify-certificates' element={<Verify/>}/>
         <Route path='/profile' element={<Profile/>}/>
         <Route path='/help' element={<Help/>}/>

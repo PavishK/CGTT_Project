@@ -18,7 +18,7 @@ const formatTimeStamp=(url)=>{
     const blue='\x1b[34m\x1b[4m';
 
     console.clear();
-    console.log('\n'+gray+dateFormat+yellow+" [node] "+reset+green+"index.js "+reset+gray+"Server is running on "+reset+blue+url+'\n'+reset);
+    console.log('\n'+gray+dateFormat+yellow+" [node] "+reset+green+"index.js "+reset+gray+"Server is running on port "+reset+blue+url+'\n'+reset);
 }
 
 export default formatTimeStamp;

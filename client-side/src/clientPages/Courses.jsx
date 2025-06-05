@@ -8,7 +8,10 @@ import {
   Lightbulb,
   FileText,
   TrendingUp,
-  CornerDownLeft
+  XSquareIcon,
+  DoorOpen,
+  Clock,
+  BookOpen
 } from 'lucide-react';
 import Sample from '../assets/images/login_main.svg';
 import Loader from '../Loader.jsx';
@@ -25,17 +28,52 @@ function Courses() {
   const [filteredCourseData,setFilteredCourseData]=useState([]);
   const [enrolledCourseData,setEnrolledCourseData]=useState([]);
   const [makeLoading,setMakeLoading]=useState(false);
-  const [userData,setUserData]=useState({});
+  const [userData,setUserData]=useState(getUserData());
+
+  const [formPopup,setFormPopup]=useState(false);
+  const [enrollPopup,setEnrollPopup]=useState(false);
+  const [enrollmentData,setEnrollmentData]=useState({});
 
   const navigate=useNavigate(null);
   const apiUrl=import.meta.env.VITE_SERVER_API;
 
+
+  const EnrollmentRequest=async()=>{
+    setMakeLoading(true);
+    try {
+      await axios.post(apiUrl+'/api/course/enollment-request',{user_id:userData._id,course_id:enrollmentData.id});
+      toast.success('Enrollment request submitted! Await admin approval.')
+    } catch (error) {
+      toast.error("Unable to submit enrollment request.");
+    } finally{
+      setMakeLoading(false);
+      setEnrollPopup(false);
+    }
+  }
+
   const onClickSelectedCourse=(data)=>{
-    alert("Enroll now!");
+   if(!userData){
+    toast("Please log in or register to continue to the course.",{icon:<DoorOpen className='text-green-500' size={28}/>});
+    setFormPopup(true);
+   }
+   else{
+    toast("Please enroll to continue with the course.",{icon:<BookOpen className='text-blue-500' size={28}/>});
+    setEnrollPopup(true);
+    setEnrollmentData(data);
+   }
   }
 
   const onEnrolledCourseClicked=(data)=>{
-    navigate(`/selected-course/${data.title}`,{state:data})
+    if(data.enrollment_status){
+      navigate(`/selected-course/${data.title}`,{state:data})
+    }
+    else{
+      toast("Your enrollment request for this course is in progress.",
+        {
+          icon:<Clock className='text-yellow-500' size={28}/>,
+        }
+      )
+    }
   }
 
   useEffect(() => {
@@ -88,6 +126,7 @@ function Courses() {
   
     fetchCourseData();
     fetchEnrollmentCoursesData();
+    setUserData(getUserData());
   }, []);
 
   return (
@@ -113,7 +152,7 @@ function Courses() {
 
     <div className='mt-5 w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-y-4 gap-x-6'>
       {filteredCourseData.map((item,index)=>(
-        <div className='border w-auto sm:w-auto h-80 rounded-lg transition-transform ease-out hover:scale-105 cursor-pointer' key={index} onClick={()=>onClickSelectedCourse(item)}>
+        <div className='border w-auto sm:w-auto h-80 rounded-lg transition-transform ease-out cursor-pointer' key={index} onClick={()=>onClickSelectedCourse(item)}>
       <img src={Sample} className='w-full h-40 bg-gray-100'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>
@@ -135,7 +174,7 @@ function Courses() {
 
       </div>
     ):(
-      <div className='flex items-center justify-center text-xl font-normal w-full mt-10 gap-x-1'>
+      <div className={`flex items-center justify-center text-xl font-normal w-full mt-10 gap-x-1 ${enrolledCourseData.length>0?'hidden':'block'}`}>
         <SearchX size={28} className='text-red-500'/>
         <h1>No courses match your search.</h1>
       </div>
@@ -152,15 +191,17 @@ function Courses() {
       <h1 className='text-lg mt-3 font-bold'>Enrolled Courses ({enrolledCourseData.length})</h1>
       <div className='mt-5 w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-3 gap-y-4 gap-x-6'>
       {enrolledCourseData.map((item,index)=>(
-        <div className='border w-auto sm:w-auto h-72 rounded-lg transition-transform ease-out hover:scale-105 cursor-pointer' key={index} onClick={()=>onEnrolledCourseClicked(item)}>
+
+      <div className={`border w-auto sm:w-auto h-72 rounded-lg transition-transform ease-out ${item.enrollment_status?'cursor-pointer':'cursor-wait bg-gray-100'}`} key={index} onClick={()=>onEnrolledCourseClicked(item)}>
       <img src={Sample} className='w-full h-40 bg-gray-100'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>
-        <div className={`p-1 rounded-full text-white bg-green-400`}>
-        <Unlock size={22}/>
+        <div className={`p-1 rounded-full text-white ${item.enrollment_status?'bg-green-400':'bg-yellow-400'}`}>
+        <Unlock size={22} className={`${!item.enrollment_status?'hidden':'block'}`}/>
+        <Lock size={22} className={`${item.enrollment_status?'hidden':'block'}`}/>
         </div>
       </div>
-      <p className='p-1.5'>{item.description}</p>
+            <p className='p-1.5 w-auto  h-20 overflow-scroll cursor-all-scroll'>{item.description}</p>
       </div>
       ))}
 
@@ -170,6 +211,50 @@ function Courses() {
       
      ):null}
 
+     {/* Login Popup */}
+
+      {formPopup?(
+      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
+      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
+      <div className=' flex items-start justify-between w-full'>
+      <div className='flex items-start justify-normal gap-x-1 text-green-600'>
+      <DoorOpen size={28}/>
+      <span className='text-2xl font-bold'>Login / Register</span>
+      </div>
+      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setFormPopup(false)}/>
+      </div>
+      <p className='w-full text-center text-gray-600'>Every journey begins with a step.</p>
+        <img src={Sample} className='w-96 h-fit'/>
+        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer hover:underline' onClick={()=>navigate('/user-login_register')}>Login / Register</button>
+      </div>
+      </div> 
+      ):null}
+
+      {/* Enroll Popup */}
+
+      {enrollPopup?(
+      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
+      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
+      <div className=' flex items-start justify-between w-full'>
+      <div className='flex items-start justify-normal gap-x-1 text-blue-600'>
+      <BookOpen size={28}/>
+      <span className='text-2xl font-bold'>Request Enrollment </span>
+      </div>
+      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setEnrollPopup(false)}/>
+      </div>
+      <div className='p-2.5 flex items-start justify-normal flex-row gap-x-1.5 w-full text-lg'>
+      <h2>Certificate</h2>
+      <span>|</span>
+      <span className='capitalize'>
+      {enrollmentData.title}
+      </span>
+      </div>
+      <hr className='w-full'/>
+      <p className='font-semibold'>[Note: Enrollment approval may take a few days. <br/> Check back daily for updates.]</p>
+        <button className='font-bold bg-blue-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={EnrollmentRequest}>Enroll</button>
+      </div>
+      </div> 
+      ):null}
      <Loader loading={makeLoading}/>
   </div>  
   )

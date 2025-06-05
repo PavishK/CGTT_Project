@@ -3,20 +3,30 @@ import { data, useLocation } from 'react-router-dom'
 import Sample from '../assets/images/main_page_image.svg';
 import {
   LockKeyhole,
-  UnlockKeyhole
+  UnlockKeyhole,
+  XSquareIcon,
+  UserCheck,
 } from 'lucide-react';
 import {toast} from 'react-hot-toast';
 import axios from 'axios';
 import Loader from '../Loader.jsx';
 import SelectedTask from './SelectedTask';
+import {getUserData} from '../service/StorageService.jsx';
+import GenerateCertificate from '../certificate/GenerateCertificate.jsx';
 
 function SelectedCourse() {
     const locationData=useLocation();
     const [courseData,setCourseData]=useState(locationData.state);
-    const [downloadable,setDownloadable]=useState(false);
     const [courseTasks,setCourseTasks]=useState([]);
     const [makeLoading,setMakeLoading]=useState(false);
     const [selectedTask,setSelectedTask]=useState({selected:false,data:{}});
+
+    const [downloadPopup,setDownloadPopup]=useState(false);
+    const [certificateData,setCertificateData]=useState({});
+    const [userData,setUserData]=useState({});
+    const [verifyName,setVerifyName]=useState("");
+    const [SDCertificate,setSDCertificate]=useState(false);
+
     const apiUrl=import.meta.env.VITE_SERVER_API;
 
     useState(()=>{
@@ -31,6 +41,9 @@ function SelectedCourse() {
           setMakeLoading(false);
         }
       }
+      setUserData(getUserData());
+      setVerifyName(getUserData().name);
+      setCourseData(locationData.state);
       getCourseTasks();
     },[]);
 
@@ -44,15 +57,41 @@ function SelectedCourse() {
       setSelectedTask({selected:true,data:data});
     }
 
-    const downloadHandler=()=>{
-      if(downloadable)
-        toast.success("Download started!");
+    const onConfirmName=()=>{
+      if(verifyName.length==0 || verifyName.length<4)
+        toast.error("Verify Name field must not be empty and contains full name.");
+      else{
+        setDownloadPopup(false);
+        setSDCertificate(true);
+      }
+
+    }
+
+    const downloadHandler=async()=>{
+      if(courseData.course_completed){
+        if(!userData)
+          toast.error("Please login to download certificate.");
+        else{
+          setMakeLoading(true);
+          try {
+            const res=await axios.post(apiUrl+'/api/course/get-certificate-data',{user_id:userData._id,course_id:courseData.id});
+            setCertificateData(res.data.data);
+            console.log(res.data.data);
+            setDownloadPopup(true);
+          } catch (error) {
+            toast.error("Unable to download certificate.");
+          } finally{
+            setMakeLoading(false);
+          }
+        }
+      }
       else
         toast.error("Please complete the tasks!");
     }
 
   return (
-    <div className='w-full'>
+  <>
+    <div className='w-full flex item-start justify-normal flex-col'>
       <div className='h-full flex items-start justify-normal flex-col'>
         <img src={Sample} className='h-60 w-full object-cover rounded-lg '/>
         <div className='p-1 w-full flex items-start justify-between flex-col sm:flex-row gap-y-1'>
@@ -61,7 +100,7 @@ function SelectedCourse() {
         <p>{new Date(courseData.created_at).toDateString()}</p>
         </div>
         <button className={`flex items-center justify-normal gap-x-1 text-xl transition-transform ease-in border p-3 rounded-lg font-semibold w-full sm:w-fit hover:scale-105 cursor-pointer`} onClick={downloadHandler}>
-        {downloadable?
+        {courseData.course_completed?
           <UnlockKeyhole className={`bg-green-500 p-1 rounded-full text-white`} size={30}/>
         :
           <LockKeyhole className={`bg-red-500 p-1 rounded-full text-white`} size={30}/>
@@ -93,8 +132,46 @@ function SelectedCourse() {
       <SelectedTask data={selectedTask.data} close={()=>setSelectedTask({selected:false,data:selectedTask.data})}/>
       </div>
 
+    {downloadPopup?(
+        <div className='fixed items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
+        <center className=''>
+      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-52'>
+      <div className='flex items-start justify-between w-full'>
+        <div className='flex items-start justify-normal gap-x-1 text-xl font-bold text-blue-500'>
+          <UserCheck size={25}/>
+          <h1>Verify Name</h1>
+        </div>
+      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setDownloadPopup(false)}/>
+      </div>
+        <p className='font-semibold text-start mt-3'>Verify the name below before <br/>downloading the certificate.</p>
+        <input className='w-full p-2 border rounded-lg text-lg uppercase' value={verifyName} name='name' onChange={(e)=>setVerifyName(e.target.value)} />
+        <button className='font-bold bg-blue-500 text-white p-2 rounded-lg self-center cursor-pointer mt-2' onClick={onConfirmName}>Confirm Name</button>
+      </div>
+        </center>
+        </div> 
+    ):null}
+
+    {SDCertificate?(
+        <div className='fixed items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg overflow-auto p-2'>
+        <center>
+      <div className=' mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-20 '>
+      <div className='flex items-start justify-between w-full pr-20 sm:pr-0'>
+        <div className='flex items-start justify-normal gap-x-1 text-xl font-bold text-blue-500'>
+          <UserCheck size={25}/>
+          <h1>Verify / Download Certificate</h1>
+        </div>
+      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setSDCertificate(false)}/>
+      </div>
+      <div className='mr-20 sm:mr-0'>
+        <GenerateCertificate props={{...certificateData,name:verifyName,title:courseData.title}} close={()=>setSDCertificate(false)}/>
+      </div>
+      </div>
+        </center>
+        </div> 
+    ):null}
       <Loader loading={makeLoading}/>
     </div>
+  </>
   )
 }
 

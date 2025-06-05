@@ -91,7 +91,7 @@ function ManageUsers() {
       </div>
       <table className={`w-full ${usersData.length==0?'hidden':''}`}>
       <tbody>
-          <tr className='flex items-start justify-between border-b p-2 font-bold'>
+          <tr className='flex items-start text-lg justify-between border-b p-2 font-bold'>
             <td>ID</td>
             <td>USERNAME</td>
             <td>EMAIL</td>

@@ -1,13 +1,17 @@
 import express from 'express';
 import {
+    acceptEnrollment,
     addNewCourse,
     addNewCourseTask,
+    allowCourseCompletion,
     deleteCourse,
     deleteCourseTask,
+    deleteEnrollmentData,
     deleteUser, 
     displayAllUsersInfo, 
     displayCoursesDatas,
     displayCourseTasks, 
+    displayEnrollmentsData, 
     updateCourseData, 
     updateUser
 } from '../controllers/adminController.js';
@@ -31,5 +35,11 @@ router.post('/insert-course-data',addNewCourse);
 //Manage Course Task
 router.delete('/delete-course-task-data/:id',deleteCourseTask);
 router.post('/insert-course-task-data',addNewCourseTask);
+
+//Manage Enrollments
+router.get('/get-enrollments-data/:_id/:email',displayEnrollmentsData);
+router.delete('/delete-enrollment-data/:id',deleteEnrollmentData);
+router.put('/accept-enrollment-data',acceptEnrollment);
+router.put('/allow-course-completion',allowCourseCompletion);
 
 export default router;

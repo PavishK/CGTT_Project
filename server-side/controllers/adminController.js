@@ -235,3 +235,86 @@ export const addNewCourseTask=(req,res)=>{
 }
 
 //-x-
+
+//Enrollments Manager
+
+export const displayEnrollmentsData=async(req,res)=>{
+    try {
+        const { _id, email } = req.params;
+        if (!_id || !email)
+            return res.status(402).json({ message: "Please login to continue." });
+
+        const flag = await verifyAdmin({ _id, email });
+
+        if (flag) {
+            let sql=`
+            SELECT enrollments.id,users.name,users.email,courses.title,enrollments.enrollment_status,enrollments.course_completed 
+            FROM enrollments JOIN users ON users._id=enrollments.user_id 
+            JOIN courses ON courses.id=enrollments.course_id;
+            `;
+
+            db.query(sql,[],(err,result)=>{
+                if(err)
+                    throw new Error("Error while executing.");
+                return res.status(201).json({message:"Enrollment datas fetched!",data:result});
+            });            
+        }        
+        else
+           return res.status(401).json({message:"Unauthorized Access!"});
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+export const deleteEnrollmentData=(req,res)=>{
+    try {
+        const {id}=req.params;
+        if(!id)
+            return res.status(401).json({message:"Unable to delete Enrollment data."});
+        let sql=`DELETE FROM enrollments WHERE id=?;`;
+        db.query(sql,[id],(err,result)=>{
+            if(err)
+                throw new Error("Error while executing.");
+            return res.status(201).json({message:"Enrollment data deleted successfully!"});
+        })
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+export const acceptEnrollment=(req,res)=>{
+    try {
+        const {id}=req.body;
+        if(!id)
+            return res.status(401).json({message:"Unable to accept enrollmet."});
+        let sql=`
+        UPDATE enrollments SET enrolled_at=?, enrollment_status=? WHERE id=?;
+        `;
+        db.query(sql,[new Date(),1,id],(err,result)=>{
+            if(err)
+                throw new Error("Error while executing.");
+            return res.status(201).json({message:"Enrollment Accepted!"});
+        });
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+export const allowCourseCompletion=(req,res)=>{
+    try {
+        const {id}=req.body;
+        if(!id)
+            throw new Error("Missing Data.");
+        let sql=`UPDATE enrollments SET course_completed=?, completed_at=? WHERE id=?`;
+        db.query(sql,[1,new Date(),id],(err,result)=>{
+            if(err)
+                throw new Error("Error while executing.");
+            return res.status(201).json({message:"Enrollment data updated."});
+        });
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+// -X-
+
