@@ -150,14 +150,14 @@ function LoginRegister() {
     return (
         <>
             {toggleForm ? (
-                <div className='sm:w-input-text sm:ml-6 w-full p-2 sm:p-0 flex items-start justify-start flex-col gap-y-2'>
+                <div className='sm:w-[500px] sm:ml-6 w-full p-2 sm:p-0 flex items-start justify-start flex-col gap-y-2'>
                     <h2 className='text-4xl sm:text-5xl font-medium'>Log in to your account</h2>
                     <p className='ml-0.5 text-base font-medium'>
                         Don't have an account? <span className='text-blue-700 underline cursor-pointer' onClick={formToggler}>Register</span>
                     </p>
                 </div>
             ) : (
-                <div className='sm:w-input w-full p-2 sm:p-0 flex items-start justify-start flex-col gap-y-2'>
+                <div className='sm:w-[470px] w-full p-2 sm:p-0 flex items-start justify-start flex-col gap-y-2'>
                     <h2 className='text-4xl sm:text-5xl font-medium'>Create an account</h2>
                     <p className='ml-0.5 text-base font-medium'>
                         Already have an account? <span className='text-blue-700 underline cursor-pointer' onClick={formToggler}>Log in</span>
@@ -168,22 +168,22 @@ function LoginRegister() {
             {toggleForm ? (
                 <div className='w-full flex items-center justify-center flex-col gap-y-1.5 mt-3'>
                     <form onSubmit={onLoginFormSubmit} className='w-full p-2 flex items-center justify-center flex-col gap-y-4'>
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type='text' name='userID' placeholder='Enter your name or email' value={loginData.userID} onChange={handleLoginInputChange} id='username' autoComplete='username' required />
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type={showLoginPassword ? 'text' : 'password'} name='password' placeholder='Enter your password' value={loginData.password} onChange={handleLoginInputChange}  id='password' autoComplete='current-password' required />
-                        <div className='w-full sm:w-input flex items-center justify-between flex-row sm:text-lg'>
+                        <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type='text' name='userID' placeholder='Enter your name or email' value={loginData.userID} onChange={handleLoginInputChange} id='username' autoComplete='username' required />
+                        <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type={showLoginPassword ? 'text' : 'password'} name='password' placeholder='Enter your password' value={loginData.password} onChange={handleLoginInputChange}  id='password' autoComplete='current-password' required />
+                        <div className='w-full sm:w-[470px] flex items-center justify-between flex-row sm:text-lg'>
                             <p><input type='checkbox' checked={showLoginPassword} onChange={(e) => setShowLoginPassword(e.target.checked)} /> Show password</p>
                             <p className='text-gray-500 cursor-pointer hover:text-gray-400'>Forgot password?</p>
                         </div>
 
                         {/* Shared Turnstile Widget */}
-                        <div ref={turnstileRef} className='w-full sm:w-input'></div>
+                        <div ref={turnstileRef} className='w-full sm:w-[470px]'></div>
 
                         <button
                             type="submit"
-                            className="relative bg-bglight border-2 border-textlight p-2 w-full sm:w-input text-lg rounded-lg font-medium 
+                            className="relative bg-bglight border-2 border-textlight p-2 w-full sm:w-[470px] text-lg rounded-lg font-medium 
                             cursor-pointer transition-all duration-200 ease-in-out 
                             overflow-hidden shadow-2xl 
-                            before:absolute before:left-0 before:h-48 before:w-input 
+                            before:absolute before:left-0 before:h-48 before:w-[470px] 
                             before:origin-top-right before:-translate-x-full before:translate-y-12 
                             before:-rotate-90 before:bg-gray-900 before:transition-all before:duration-300 
                             before:ease hover:text-white hover:before:-rotate-180"
@@ -195,23 +195,23 @@ function LoginRegister() {
             ) : (
                 <div className='w-full flex items-center justify-center flex-col gap-y-1.5 mt-3'>
                     <form onSubmit={onRegisterFormSubmit} className='w-full p-2 flex items-center justify-center flex-col gap-y-4'>
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type='text' name='name' value={registerData.name} onChange={onRegisterInputChange} placeholder='Enter your name' required autoComplete='username' />
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type='email' name='email' value={registerData.email} onChange={onRegisterInputChange} placeholder='Enter your email' required autoComplete='email' />
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type={showRegisterPassword?'text':'password'} name='password' value={registerData.password} placeholder='Enter your password' onChange={onRegisterInputChange} required autoComplete='new-password' />
-                        <input className='w-full sm:w-input p-2 rounded-lg text-lg border-textlight border-2' type={showRegisterPassword?'text':'password'}  name='confirm_password' value={registerData.confirm_password} placeholder='Confirm your password' onChange={onRegisterInputChange} required autoComplete='new-password' />
-                        <div className='w-full sm:w-input flex items-center justify-between flex-row sm:text-lg'>
+                        <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type='text' name='name' value={registerData.name} onChange={onRegisterInputChange} placeholder='Enter your name' required autoComplete='username' />
+                        <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type='email' name='email' value={registerData.email} onChange={onRegisterInputChange} placeholder='Enter your email' required autoComplete='email' />
+                        <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type={showRegisterPassword?'text':'password'} name='password' value={registerData.password} placeholder='Enter your password' onChange={onRegisterInputChange} required autoComplete='new-password' />
+                        <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type={showRegisterPassword?'text':'password'}  name='confirm_password' value={registerData.confirm_password} placeholder='Confirm your password' onChange={onRegisterInputChange} required autoComplete='new-password' />
+                        <div className='w-full sm:w-[470px] flex items-center justify-between flex-row sm:text-lg'>
                             <p><input type='checkbox' checked={showRegisterPassword} onChange={(e)=>setShowRegisterPassword(e.target.checked)} /> Show password</p>
                         </div>
 
                         {/* Shared Turnstile Widget */}
-                        <div ref={turnstileRef} className='w-full sm:w-input'></div>
+                        <div ref={turnstileRef} className='w-full sm:w-[470px]'></div>
 
                         <button
                             type="submit"
-                            className="relative bg-bglight border-2 border-textlight p-2 w-full sm:w-input text-lg rounded-lg font-medium 
+                            className="relative bg-bglight border-2 border-textlight p-2 w-full sm:w-[470px] text-lg rounded-lg font-medium 
                             cursor-pointer transition-all duration-200 ease-in-out 
                             overflow-hidden shadow-2xl 
-                            before:absolute before:left-0 before:h-48 before:w-input 
+                            before:absolute before:left-0 before:h-48 before:w-[470px] 
                             before:origin-top-right before:-translate-x-full before:translate-y-12 
                             before:-rotate-90 before:bg-gray-900 before:transition-all before:duration-300 
                             before:ease hover:text-white hover:before:-rotate-180"

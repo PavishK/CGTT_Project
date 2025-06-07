@@ -104,7 +104,7 @@ function ManageEnrollments() {
       setEnrollmentDatas([...updatedData]);
       toast.success("Enrollment data updated successfully.");
     } catch (error) {
-      console.log(error);
+      toast.error("Unable to update enrollment data.");
     } finally{
       setMakeLoading(false);
       setConfirmationPopup(false);

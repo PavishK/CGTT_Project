@@ -66,7 +66,6 @@ function MainLayout() {
   }
 
   useEffect(() => {
-
     const sessionCheck = async () => {
       setMakeLoading(true);
       try {
@@ -86,7 +85,9 @@ function MainLayout() {
     };
 
     MakeLoading();
-    sessionCheck();
+    if(getUserData()!=false){
+      sessionCheck();
+    }
     MakeNavigationAction();
     
   }, [location]);

@@ -53,3 +53,8 @@ app.use('/api/task',taskRouter);
 
 import adminRouter from './routes/adminRouter.js';
 app.use('/api/admin',adminRouter);
+
+//Verify Handler
+
+import verifyCRouter from './routes/verifyRouter.js';
+app.use('/api/certificate',verifyCRouter);

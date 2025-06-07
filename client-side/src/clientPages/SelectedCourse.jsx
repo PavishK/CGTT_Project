@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import { data, useLocation } from 'react-router-dom'
 import Sample from '../assets/images/main_page_image.svg';
 import {
@@ -12,7 +12,7 @@ import axios from 'axios';
 import Loader from '../Loader.jsx';
 import SelectedTask from './SelectedTask';
 import {getUserData} from '../service/StorageService.jsx';
-import GenerateCertificate from '../certificate/GenerateCertificate.jsx';
+const GenerateCertificate = React.lazy(() => import('../certificate/GenerateCertificate'));
 
 function SelectedCourse() {
     const locationData=useLocation();
@@ -163,7 +163,9 @@ function SelectedCourse() {
       <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setSDCertificate(false)}/>
       </div>
       <div className='mr-20 sm:mr-0'>
+        <Suspense fallback={<div className='text-xl animate-pulse flex items-center justify-center w-full h-full'>Loading certificate...</div>}>
         <GenerateCertificate props={{...certificateData,name:verifyName,title:courseData.title}} close={()=>setSDCertificate(false)}/>
+        </Suspense>
       </div>
       </div>
         </center>

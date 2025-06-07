@@ -1,7 +1,5 @@
 import React, { useRef } from 'react';
 import TTLogo from '../assets/images/ttlogo.png';
-import html2canvas from 'html2canvas';
-import jsPDF from 'jspdf';
 import './certificateStyle.css';
 import {toast} from 'react-hot-toast';
 
@@ -17,23 +15,30 @@ function GenerateCertificate({props,close}) {
     return String(fdate+'/'+fmonth+'/'+year);
   }
 
-  const downloadPDF = (e) => {
-    e.preventDefault();
-    toast.success("Download started!");
-    html2canvas(certificateRef.current, { scale: 2 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF({
-        orientation: 'landscape',
-        unit: 'pt',
-        format: [canvas.width, canvas.height],
-      });
+ const downloadPDF = async (e) => {
+  e.preventDefault();
+  toast.success("Download started!");
 
-      pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-      pdf.save(`TT-${(props.name).replaceAll(' ','') + '-'+(props.title).replaceAll(' ','_')}.pdf`);
-    });
-    toast.success('Download Completed!');
-    close();
-  };
+  // Lazy-load jsPDF
+  const jsPDF = await import('jspdf').default;
+  const html2canvas = (await import('html2canvas')).default;
+
+  const canvas = await html2canvas(certificateRef.current, { scale: 2 });
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jsPDF({
+    orientation: 'landscape',
+    unit: 'pt',
+    format: [canvas.width, canvas.height],
+  });
+
+  const fileName = `TT-${props.name.replaceAll(' ', '')}-${props.title.replaceAll(' ', '_')}.pdf`;
+  pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+  pdf.save(fileName);
+
+  toast.success('Download Completed!');
+  close();
+};
+
 
   return (
     <>
@@ -65,7 +70,7 @@ function GenerateCertificate({props,close}) {
         </div>
         <div className="flex items-start justify-between w-full mt-6">
           <p className="text-sm font-semibold font-body">
-            Certificate ID: {props.cid}
+            Certificate ID: <span className='uppercase'>{props.cid}</span>
           </p>
           <p className="text-sm font-semibold font-body">
             Reference Number: 0{props.ref}

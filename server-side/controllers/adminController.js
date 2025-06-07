@@ -300,16 +300,34 @@ export const acceptEnrollment=(req,res)=>{
     }
 }
 
-export const allowCourseCompletion=(req,res)=>{
+const generateID=async(data)=>{
+     var cid=`tt-${data.user_id}0${data.course_id}0${data.id}-${new Date().getFullYear()}-${Math.floor(Math.random()*9000)+1000}`;
+     return cid;
+}
+
+export const allowCourseCompletion=async(req,res)=>{
     try {
         const {id}=req.body;
         if(!id)
             throw new Error("Missing Data.");
-        let sql=`UPDATE enrollments SET course_completed=?, completed_at=? WHERE id=?`;
-        db.query(sql,[1,new Date(),id],(err,result)=>{
-            if(err)
-                throw new Error("Error while executing.");
+        let sql=`UPDATE enrollments SET course_completed=?, completed_at=? WHERE id=?;
+        SELECT * FROM enrollments WHERE id=?;
+        `;
+        db.query(sql,[1, new Date(), id, id],async(err,result)=>{
+            if(err) throw new Error("Error while executing.");
+
+            let sql=`
+            INSERT INTO certificates (course_id,user_id,enrollment_id,cid) 
+            VALUES (?, ?, ?, ?);`;
+
+            //Generate Certificate ID
+            const data=result[1][0];
+            const cid= await generateID(data);
+
+            db.query(sql,[data.course_id,data.user_id,data.id,cid],(error,r)=>{
+                if(error) throw new Error("Error while executing.");
             return res.status(201).json({message:"Enrollment data updated."});
+            });
         });
     } catch (error) {
         return res.status(500).json({message:error.message});
