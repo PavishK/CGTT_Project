@@ -126,7 +126,7 @@ function ManageCourses() {
       <div className={`${coursesData.length!==0?'hidden':'block'} text-xl`}>
         <h1>No Course ADD + now ☺️.</h1>
       </div>
-      <div className={`flex items-start justify-normal flex-col gap-y-3 ${coursesData.length>0?'block':'hidden'}`}>
+      <div className={`flex items-start justify-normal flex-col gap-y-3`}>
       {coursesData.map((val,i)=>(
         <div className='flex items-start justify-normal border rounded-lg flex-row gap-x-2 h-48 w-full overflow-x-auto overflow-y-hidden' key={i}>
           <img src={val?.image_url || Sample} alt={val.title} className='sm:w-56 h-48 w-36 border-r'/>

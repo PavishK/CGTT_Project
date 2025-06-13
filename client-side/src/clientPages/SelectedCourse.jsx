@@ -91,6 +91,7 @@ function SelectedCourse() {
 
   return (
   <>
+
     <div className='w-full flex item-start justify-normal flex-col'>
       <div className='h-full flex items-start justify-normal flex-col'>
         <img src={Sample} className='h-60 w-full object-cover rounded-lg '/>
@@ -111,6 +112,7 @@ function SelectedCourse() {
         <hr className='w-full mt-1'/>
       </div>
 
+        {courseTasks.length>0 ? (
       <div className={`w-full p-2 mt-3 flex items-center justify-normal flex-col-reverse gap-y-3.5
       ${courseTasks.length===0 || selectedTask.selected?'hidden':'block'}
       `}>
@@ -127,6 +129,13 @@ function SelectedCourse() {
         </div>
       ))}
       </div>
+
+  ):(
+    <div className='text-xl font-bold flex items-center justify-center mt-5'>
+      <h1>No tasks yet!☺️</h1>
+    </div>
+  )}
+
 
       {selectedTask.selected && (
       <div className={`${selectedTask.selected?'block':'hidden'}`}>

@@ -90,7 +90,7 @@ function ManageTasks() {
     <div className={`${tasks.length!==0?'hidden':'block'} text-xl`}>
       <h1>No Task ADD + now ☺️.</h1>
     </div>
-    <div className={`flex items-start justify-normal flex-col gap-y-2 w-full h-full ${tasks.length>0?'block':'hidden'}`}>
+    <div className={`flex items-start justify-normal flex-col gap-y-2 w-full h-full`}>
     {tasks.map((val,i)=>(
       <div className='w-full border flex items-start justify-between flex-row rounded-lg h-40' key={i}>
       <div className='flex items-start justify-normal flex-col gap-y-2 p-1.5 border-r w-full'>

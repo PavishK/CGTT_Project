@@ -40,7 +40,6 @@ export const displayEnrolledCourseDatas=(req,res)=>{
 // Enrollment Request
 
 export const requestEnrollment=(req,res)=>{
-    console.log(req.body);
     try {
         const {user_id,course_id}=req.body;
         if(!user_id || !course_id)

@@ -18,7 +18,6 @@ const verifyTurnstileToken=async(token)=>{
     );
 
     const { success } = response.data;
-    //console.log(response)
     if (!success) {
       
       return false;
@@ -26,7 +25,6 @@ const verifyTurnstileToken=async(token)=>{
 
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }
@@ -106,7 +104,6 @@ export const userLogin=(req,res)=>{
     });
     
   } catch (error) {
-    console.log(error)
     return res.status(500).json({message:error.message});
   }
 

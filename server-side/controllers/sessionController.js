@@ -2,7 +2,6 @@ import { verifyJWTWebToken} from '../middlewares/JWTMiddleware.js';
 import db from '../db/dbConnection.js';
 
 export const sessionCheck=async(req,res)=>{
-    //console.log("Session Check -> ",req.signedCookies);
     try {
         const {jwttoken}=req.signedCookies;
         if(!jwttoken)

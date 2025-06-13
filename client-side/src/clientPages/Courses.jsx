@@ -174,11 +174,16 @@ function Courses() {
 
       </div>
     ):(
-      <div className={`flex items-center justify-center text-xl font-normal w-full mt-10 gap-x-1 ${enrolledCourseData.length>0?'hidden':'block'}`}>
+      <div className={`flex items-center justify-center text-xl font-normal w-full mt-10 gap-x-1 ${enrolledCourseData.length>0 || coursesData.length==0 ?'hidden':'block'}`}>
         <SearchX size={28} className='text-red-500'/>
         <h1>No courses match your search.</h1>
       </div>
     )}
+
+      <div className={`flex items-center justify-center text-xl font-normal w-full mt-10 gap-x-1 ${coursesData.length!==0 ?'hidden':'block'}`}>
+        <SearchX size={28} className='text-red-500'/>
+        <h1>No Courses Added!</h1>
+      </div>
 
      {/* Enrolled Courses */}
 
