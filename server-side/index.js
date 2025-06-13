@@ -58,3 +58,8 @@ app.use('/api/admin',adminRouter);
 
 import verifyCRouter from './routes/verifyRouter.js';
 app.use('/api/certificate',verifyCRouter);
+
+//Profile Handler
+
+import profileRouter from './routes/profileRouter.js'
+app.use('/api/profile',profileRouter);

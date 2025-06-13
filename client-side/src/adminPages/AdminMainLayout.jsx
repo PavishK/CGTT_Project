@@ -62,6 +62,7 @@ function AdminMainLayout() {
         }
         removeUserData();
         setMakeLoading(false);
+        navigate('/');
       }
     };
     sessionCheck();

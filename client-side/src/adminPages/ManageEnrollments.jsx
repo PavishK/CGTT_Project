@@ -33,9 +33,8 @@ function ManageEnrollments() {
       try {
         const res=await axios.get(`${apiUrl}/api/admin/get-enrollments-data/${userData._id}/${userData.email}`);
         setEnrollmentDatas(res.data.data);
-        console.log(res.data.data);
       } catch (error) {
-       toast.error("Unable to load enrollment datas.");
+       toast.error("Session expired. Please login.");
       } finally{
         setMakeLoading(false);
       }
@@ -151,47 +150,81 @@ function ManageEnrollments() {
         </tbody>
       </table>
 
-      {/* Delete Enrollment */}
-
-      {confirmPopupD?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setConfirmPopupD(false)}/>
-        <p className='font-semibold'>Click <span className='text-green-500'>Confirm</span> to remove "{deleteEnrollmentData.name}" from <br/> "{deleteEnrollmentData.title}" course.</p>
-        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={DeleteEnrollmentData}>Confirm</button>
-      </div>
-      </div> 
-      ):null}
+      {/* Remove Enrollment */}
+      {confirmPopupD && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-md bg-white border rounded-lg p-4 shadow-lg relative">
+            <XSquareIcon
+              className="absolute top-2 right-2 text-red-500 cursor-pointer"
+              size={28}
+              onClick={() => setConfirmPopupD(false)}
+            />
+            <p className="font-semibold mt-6">
+              Click <span className="text-green-500">Confirm</span> to remove "<b>{deleteEnrollmentData.name}</b>" from
+              <br /> "<b>{deleteEnrollmentData.title}</b>" course.
+            </p>
+            <button
+              className="mt-4 w-full font-bold bg-green-500 text-white p-2 rounded-lg cursor-pointer"
+              onClick={DeleteEnrollmentData}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Allow Enrollment */}
-      
-      {allowPopup?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setAllowPopup(false)}/>
-        <p className='font-semibold'>Click <span className='text-green-500'>Confirm</span> to enroll, "{allowPopupData.name}", in <br/> "{allowPopupData.title}" course.</p>
-        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={AllowEnrollment}>Confirm</button>
-      </div>
-      </div> 
-      ):null}
+      {allowPopup && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-md bg-white border rounded-lg p-4 shadow-lg relative">
+            <XSquareIcon
+              className="absolute top-2 right-2 text-red-500 cursor-pointer"
+              size={28}
+              onClick={() => setAllowPopup(false)}
+            />
+            <p className="font-semibold mt-6">
+              Click <span className="text-green-500">Confirm</span> to enroll "<b>{allowPopupData.name}</b>" in
+              <br /> "<b>{allowPopupData.title}</b>" course.
+            </p>
+            <button
+              className="mt-4 w-full font-bold bg-green-500 text-white p-2 rounded-lg cursor-pointer"
+              onClick={AllowEnrollment}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
 
-      {/* Completion  */}
-      
-      {confirmationPopup?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <div className='flex items-start justify-between w-full'>
-      <div className='flex items-start justify-normal gap-x-0.5'>
-      <ListCheck size={28} className='text-green-500'/>
-      <span className='text-xl font-bold text-green-500'>Provide Certificate</span>
-      </div>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setConfirmationPopup(false)}/>
-      </div>
-        <p className='font-semibold'>Click <span className='text-green-500'>Confirm</span> to approve course completion for "{completionData.name}" has <br/> completed the course titled "{completionData.title}".</p>
-        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={CompletionCourse}>Confirm</button>
-      </div>
-      </div> 
-      ):null}
+      {/* Course Completion */}
+      {confirmationPopup && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-md bg-white border rounded-lg p-4 shadow-lg relative">
+            <div className="flex items-center justify-between border-b pb-2 mb-3">
+              <div className="flex items-center gap-x-2">
+                <ListCheck size={28} className="text-green-500" />
+                <span className="text-xl font-bold text-green-500">Provide Certificate</span>
+              </div>
+              <XSquareIcon
+                className="text-red-500 cursor-pointer"
+                size={28}
+                onClick={() => setConfirmationPopup(false)}
+              />
+            </div>
+            <p className="font-semibold">
+              Click <span className="text-green-500">Confirm</span> to approve course completion for
+              "<b>{completionData.name}</b>" who has completed the course titled "<b>{completionData.title}</b>".
+            </p>
+            <button
+              className="mt-4 w-full font-bold bg-green-500 text-white p-2 rounded-lg cursor-pointer"
+              onClick={CompletionCourse}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
+
     </div>
 
 

@@ -58,7 +58,7 @@ function ManageUsers() {
         setShowEditPopup(false);
         toast.success("User updated successfully!");
       } catch (error) {
-        toast.error("Unable to update user.");
+        toast.error("Something went wrong!");
       } finally{
         setMakeLoading(false);
       }
@@ -123,40 +123,78 @@ function ManageUsers() {
 
       {/* Delete User */}
 
-      {showPopup?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setShowPopup(false)}/>
-        <p className='font-semibold'>Click <span className='text-green-500'>Confirm</span> to remove "{deleteUser.name}".</p>
-        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={DeleteUser}>Confirm</button>
-      </div>
-      </div> 
-      ):null}
+      {showPopup && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-sm bg-white border rounded-lg p-4 shadow-lg relative">
+            <XSquareIcon
+              className="absolute top-2 right-2 text-red-500 cursor-pointer"
+              size={28}
+              onClick={() => setShowPopup(false)}
+            />
+            <p className="font-semibold mb-4">
+              Click <span className="text-green-500">Confirm</span> to remove "{deleteUser.name}".
+            </p>
+            <button
+              className="w-full font-bold bg-green-500 text-white p-2 rounded-lg cursor-pointer"
+              onClick={DeleteUser}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
+
 
       {/* Edit User */}
 
-      {showEditPopup?(
-      <div className='fixed flex items-start justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-28'>
-      <div className='flex items-start justify-between w-full border-b p-2'>
-        <h1 className='flex items-center juno gap-x-1 text-lg font-bold'><Edit className='text-blue-500'/>Edit</h1>
-        <XSquareIcon className='text-red-500 cursor-pointer' onClick={()=>setShowEditPopup(false)}/>
+     {showEditPopup && (
+    <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-start justify-center bg-black/70">
+      <div className="mt-28 w-[90%] max-w-md bg-white border rounded-lg shadow-lg">
+        <div className="flex items-center justify-between border-b p-3">
+          <h1 className="flex items-center gap-x-2 text-lg font-bold">
+            <Edit className="text-blue-500" />
+            Edit
+          </h1>
+          <XSquareIcon
+            className="text-red-500 cursor-pointer"
+            onClick={() => setShowEditPopup(false)}
+          />
+        </div>
+        <div className="p-4 flex flex-col gap-y-3">
+          <p className="font-semibold">
+            Modify {editUser.data.name}'s role from the dropdown below.
+          </p>
+          <label className="font-bold w-full">
+            Email:
+            <input
+              className="w-full border p-1 mt-1"
+              value={editUser.data.email}
+              disabled
+            />
+          </label>
+          <label className="font-bold w-full">
+            Role:
+            <select
+              name="role"
+              className="w-full border p-1 mt-1"
+              defaultValue={editUser.data.role}
+              onChange={(e) => setSelectedRole(e.target.value)}
+            >
+              <option value="admin">admin</option>
+              <option value="user">user</option>
+            </select>
+          </label>
+          <button
+            className="self-center bg-blue-500 text-white p-2 rounded-lg font-bold"
+            onClick={updateUser}
+          >
+            Update
+          </button>
+        </div>
       </div>
-      <div className='flex items-start justify-normal gap-y-2 flex-col p-2'>
-        <p className='font-semibold'>Modify {editUser.data.name}'s role from the dropdown<br/> below.</p>
-        <label htmlFor='email'  className='flex items-start justify-normal gap-x-2 w-full font-bold'>Email:
-        <input className='w-full' value={editUser.data.email} disabled/>
-        </label>
-        <label htmlFor='role' className='flex items-start justify-normal gap-x-2 w-full font-bold'>Role:</label>
-        <select name='role' className='w-full' defaultValue={editUser.data.role} onChange={(e)=>setSelectedRole(e.target.value)}>
-          <option value='admin'>admin</option>
-          <option value='user'>user</option>
-        </select>
-        <button className='self-center cursor-pointer bg-blue-500 p-2 rounded-lg text-lg font-bold text-white' onClick={updateUser}>Update</button>
-      </div>
-      </div>
-      </div> 
-      ):null}
+    </div>
+  )}
+
 
       </div> 
 

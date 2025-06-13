@@ -34,6 +34,13 @@ export default function AdminSideBar({ children, user_data }) {
     );
   }
 
+  const onClickUser=()=>{
+        dispatch(setExpanded());
+    setExpandedAction(
+      true
+    );
+  }
+
   const onLogOutClicked=async()=>{
     try {
       setMakLoading(true);
@@ -42,6 +49,7 @@ export default function AdminSideBar({ children, user_data }) {
       removeUserData();
       setTimeout(()=>window.location.reload(),800);
       setMakLoading(false);
+      navigate('/');
     } catch (error) {
       toast.error("Error logging out. Please try again.");
       setMakLoading(false);
@@ -78,10 +86,10 @@ export default function AdminSideBar({ children, user_data }) {
 {/* Footer User Info */}
 
         {user_data?.status?(
-          <div className="border-t relative flex items-center py-2 px-1 sm:px-3 my-1
+          <div  className="border-t relative flex items-center py-2 px-1 sm:px-3 my-1
         font-medium rounded-md cursor-pointer transition-colors group">
           
-          <div onClick={() => setExpanded(() => true)} className="cursor-pointer w-8 sm:w-10 h-8 sm:h-10 text-xs rounded-md sm:text-lg font-bold uppercase bg-gray-300 text-center flex items-center justify-center p-1">
+          <div onClick={() => onClickUser()} className="cursor-pointer w-8 sm:w-10 h-8 sm:h-10 text-xs rounded-md sm:text-lg font-bold uppercase bg-gray-300 text-center flex items-center justify-center p-1">
             {user_data.name[0]+user_data.name[1]}
           </div>
           <div
@@ -124,7 +132,7 @@ export default function AdminSideBar({ children, user_data }) {
           >
             <div className="leading-4">
               <h4 className="font-semibold text-black cursor-pointer " onClick={onLogInClicked}>Login or Register</h4>
-              <span className="text-xs text-gray-500">Start learning now!</span>
+              <span className="text-xs text-gray-500">Admin only -|-</span>
             </div>
           </div>
 

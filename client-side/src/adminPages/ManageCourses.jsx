@@ -37,7 +37,7 @@ function ManageCourses() {
         const res=await axios.get(`${apiUrl}/api/admin/get-courses-info/${_id}/${email}`);
         setCoursesData(res.data.data.merged)
       } catch (error) {
-        toast.error(error.response.message || 'Unable to load courses data.');
+        toast.error("Session expired. Please login.");
       } finally{
         setMakeLoading(false);
       }
@@ -152,94 +152,154 @@ function ManageCourses() {
         </div>
       ))}
 
-      {showConfirmPopup?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setShowConfirmPopup(false)}/>
-        <p className='font-semibold'>Click <span className='text-green-500'>Confirm</span> to remove "{deleteCourse.title}".</p>
-        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={deleteCourseData}>Confirm</button>
-      </div>
-      </div> 
-      ):null}
+      {/* Delete Course */}
+      {showConfirmPopup && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-md bg-white border rounded-lg p-4 shadow-lg relative">
+            <XSquareIcon
+              className="absolute top-2 right-2 text-red-500 cursor-pointer"
+              size={28}
+              onClick={() => setShowConfirmPopup(false)}
+            />
+            <p className="font-semibold mt-6">
+              Click <span className="text-green-500">Confirm</span> to remove "<b>{deleteCourse.title}</b>".
+            </p>
+            <button
+              className="mt-4 w-full font-bold bg-green-500 text-white p-2 rounded-lg cursor-pointer"
+              onClick={deleteCourseData}
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Edit Course */}
-       {showEditPopup?(
-      <div className='fixed flex items-start justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-28'>
-      <div className='flex items-start justify-between w-full border-b p-2'>
-        <h1 className='flex items-center juno gap-x-1 text-lg font-bold'><Edit className='text-blue-500'/>Edit</h1>
-        <XSquareIcon className='text-red-500 cursor-pointer' onClick={()=>setShowEditPopup(false)}/>
-      </div>
-      <div className='flex items-start justify-normal gap-y-2 flex-col p-2'>
-        <p className='font-semibold'>Modify Course ID <b>{editCourse.id}</b>.</p>
-        <div className='flex itst justify-normal flex-col gap-y-2'>
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='title' className='font-semibold'>
-            Title 
-          </label>
-          <input type='text' name='title'value={editCourse.title} onChange={onChangeEditCourseData}/>
-        </div>
+      {showEditPopup && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-lg bg-white border rounded-lg p-4 shadow-lg relative mt-16">
+            <div className="flex items-center justify-between border-b pb-2 mb-3">
+              <h1 className="flex items-center gap-x-2 text-lg font-bold">
+                <Edit className="text-blue-500" /> Edit Course
+              </h1>
+              <XSquareIcon
+                className="text-red-500 cursor-pointer"
+                size={28}
+                onClick={() => setShowEditPopup(false)}
+              />
+            </div>
+            <p className="font-semibold mb-2">Modify Course ID: <b>{editCourse.id}</b></p>
 
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='image_url' className='font-semibold'>
-            Image URL  
-          </label>
-          <input type='text' name='image_url' value={editCourse.image_url} onChange={onChangeEditCourseData}/> 
-        </div>
+            <div className="flex flex-col gap-y-3">
+              <label className="font-semibold">
+                Title
+                <input
+                  type="text"
+                  name="title"
+                  className="w-full border p-1 rounded"
+                  value={editCourse.title}
+                  onChange={onChangeEditCourseData}
+                />
+              </label>
 
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='description' className='font-semibold'>
-            Description  
-          </label>
-          <textarea className='w-full' name='description' value={editCourse.description} onChange={onChangeEditCourseData}></textarea>
-        </div>
+              <label className="font-semibold">
+                Image URL
+                <input
+                  type="text"
+                  name="image_url"
+                  className="w-full border p-1 rounded"
+                  value={editCourse.image_url}
+                  onChange={onChangeEditCourseData}
+                />
+              </label>
 
-        </div>
-        <button className='self-center cursor-pointer bg-blue-500 p-2 rounded-lg text-lg font-bold text-white' onClick={editCourseData}>Update</button>
-      </div>
-      </div>
-      </div> 
-      ):null}
+              <label className="font-semibold">
+                Description
+                <textarea
+                  name="description"
+                  className="w-full border p-1 rounded resize-none"
+                  value={editCourse.description}
+                  onChange={onChangeEditCourseData}
+                ></textarea>
+              </label>
+            </div>
 
-      {/* New Course */}
-
-       {showAddCourse?(
-      <div className='fixed flex items-start justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-28'>
-      <div className='flex items-start justify-between w-full border-b p-2'>
-        <h1 className='flex items-center juno gap-x-1 text-lg font-bold'><PlusCircle className='text-blue-500'/>Add</h1>
-        <XSquareIcon className='text-red-500 cursor-pointer' onClick={()=>setShowAddCourse(false)}/>
-      </div>
-      <div className='flex items-start justify-normal gap-y-2 flex-col p-2'>
-        <p className='font-semibold'>Adding new course.</p>
-        <div className='flex itst justify-normal flex-col gap-y-2'>
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='title' className='font-semibold'>
-            Title 
-          </label>
-          <input type='text' name='title' required placeholder=' Course name' value={newCourse.title} onChange={onChangeNewCourseData}/>
+            <button
+              className="mt-4 w-full bg-blue-500 text-white font-bold p-2 rounded-lg cursor-pointer"
+              onClick={editCourseData}
+            >
+              Update
+            </button>
+          </div>
         </div>
+      )}
 
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='image_url' className='font-semibold'>
-            Image URL  
-          </label>
-          <input type='text' name='image_url' required placeholder=' Image URL' value={newCourse.image_url} onChange={onChangeNewCourseData}/> 
-        </div>
+      {/* Add New Course */}
+      {showAddCourse && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-lg bg-white border rounded-lg p-4 shadow-lg relative mt-16">
+            <div className="flex items-center justify-between border-b pb-2 mb-3">
+              <h1 className="flex items-center gap-x-2 text-lg font-bold">
+                <PlusCircle className="text-blue-500" /> Add Course
+              </h1>
+              <XSquareIcon
+                className="text-red-500 cursor-pointer"
+                size={28}
+                onClick={() => setShowAddCourse(false)}
+              />
+            </div>
 
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='description' className='font-semibold'>
-            Description  
-          </label>
-          <textarea className='w-full focus:outline-0' required name='description' placeholder=' Course description' value={newCourse.description} onChange={onChangeNewCourseData}></textarea>
-        </div>
+            <p className="font-semibold mb-2">Add a new course below:</p>
 
+            <div className="flex flex-col gap-y-3">
+              <label className="font-semibold">
+                Title
+                <input
+                  type="text"
+                  name="title"
+                  className="w-full border p-1 rounded"
+                  placeholder="Course name"
+                  required
+                  value={newCourse.title}
+                  onChange={onChangeNewCourseData}
+                />
+              </label>
+
+              <label className="font-semibold">
+                Image URL
+                <input
+                  type="text"
+                  name="image_url"
+                  className="w-full border p-1 rounded"
+                  placeholder="Image URL"
+                  required
+                  value={newCourse.image_url}
+                  onChange={onChangeNewCourseData}
+                />
+              </label>
+
+              <label className="font-semibold">
+                Description
+                <textarea
+                  name="description"
+                  className="w-full border p-1 rounded resize-none"
+                  placeholder="Course description"
+                  required
+                  value={newCourse.description}
+                  onChange={onChangeNewCourseData}
+                ></textarea>
+              </label>
+            </div>
+
+            <button
+              className="mt-4 w-full bg-green-500 text-white font-bold p-2 rounded-lg cursor-pointer"
+              onClick={addNewCourseData}
+            >
+              Add
+            </button>
+          </div>
         </div>
-        <button className='self-center cursor-pointer bg-green-500 p-2 rounded-lg text-lg font-bold text-white' onClick={addNewCourseData}>ADD</button>
-      </div>
-      </div>
-      </div> 
-      ):null}
+      )}
 
 
 

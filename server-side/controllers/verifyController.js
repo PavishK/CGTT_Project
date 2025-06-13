@@ -13,7 +13,7 @@ export const verifyCertificate=(req,res)=>{
 
         db.query(sql,[cid],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
             return res.status(201).json({message:"Certificate found.",data:result});
         })
     } catch (error) {

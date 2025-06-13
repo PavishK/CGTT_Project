@@ -35,12 +35,20 @@ export default function Sidebar({ children, user_data }) {
     );
   }
 
+  const onClickUser=()=>{
+    dispatch(setExpanded());
+    setExpandedAction(
+      !false
+    );
+  }
+
   const onLogOutClicked=async()=>{
     try {
       setMakLoading(true);
       const res=await axios.post(apiUrl+"/api/protect/session-log-out",{},{withCredentials:true});
       toast.success(res.data.message);
       removeUserData();
+      navigate('/');
       setTimeout(()=>window.location.reload(),800);
       setMakLoading(false);
     } catch (error) {
@@ -82,7 +90,7 @@ export default function Sidebar({ children, user_data }) {
           <div className="border-t relative flex items-center py-2 px-1 sm:px-3 my-1
         font-medium rounded-md cursor-pointer transition-colors group">
           
-          <div onClick={() => setExpanded(() => true)} className="cursor-pointer w-8 sm:w-10 h-8 sm:h-10 text-xs rounded-md sm:text-lg font-bold uppercase bg-gray-300 text-center flex items-center justify-center p-1">
+          <div onClick={() => onClickUser()} className="cursor-pointer w-8 sm:w-10 h-8 sm:h-10 text-xs rounded-md sm:text-lg font-bold uppercase bg-gray-300 text-center flex items-center justify-center p-1">
             {user_data.name[0]+user_data.name[1]}
           </div>
           <div

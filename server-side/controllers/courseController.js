@@ -7,7 +7,7 @@ export const displayCoursesDatas=(req,res)=>{
             if(err)
                 return res.status(401).json({message:"Unbale to display course datas!"});
             else
-                return res.status(201).json({data:result});
+                return res.status(200).json({data:result});
         })
     } catch (error) {
         return res.status(500).json({message:error.message});
@@ -48,7 +48,7 @@ export const requestEnrollment=(req,res)=>{
         let sql=`INSERT INTO enrollments (user_id,course_id) VALUES (?, ?);`
         db.query(sql,[user_id,course_id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
             return res.status(201).json({message:"Enrollment requested successfully."});
         })
 
@@ -64,12 +64,12 @@ export const getCertificateData=(req,res)=>{
             return res.status(400).json({message:"Missing data."});
         let sql=`SELECT * FROM enrollments WHERE user_id=? AND course_id=?;`
         db.query(sql,[user_id,course_id],(err,result)=>{
-            if(err) throw new Error("Error while executing.");
+            if(err) return res.status(500).json({message:"Error while executing."});
             else{
                 if(result[0].course_completed){
                     let sql='select cid,ref from certificates where user_id=? and course_id=? and enrollment_id=?';
                     db.query(sql,[user_id,course_id,result[0].id],(e,r)=>{
-                        if(e) throw new Error("Error while executing.");
+                        if(e) return res.status(500).json({message:"Error while executing."});
                     return res.status(201).json({data:{...result[0],...r[0]}});
                     });
                 }

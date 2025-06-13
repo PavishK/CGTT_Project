@@ -7,12 +7,15 @@ import {
     deleteCourse,
     deleteCourseTask,
     deleteEnrollmentData,
+    deleteSubmissionData,
     deleteUser, 
     displayAllUsersInfo, 
     displayCoursesDatas,
     displayCourseTasks, 
     displayEnrollmentsData, 
+    getSubmissionDatas, 
     updateCourseData, 
+    updateSubmissionData, 
     updateUser
 } from '../controllers/adminController.js';
 
@@ -41,5 +44,10 @@ router.get('/get-enrollments-data/:_id/:email',displayEnrollmentsData);
 router.delete('/delete-enrollment-data/:id',deleteEnrollmentData);
 router.put('/accept-enrollment-data',acceptEnrollment);
 router.put('/allow-course-completion',allowCourseCompletion);
+
+//Manage Submissions
+router.get('/get-submissions-data/:_id/:email',getSubmissionDatas);
+router.delete('/delete-submission-data/:id',deleteSubmissionData);
+router.put('/update-submission-data/:id',updateSubmissionData);
 
 export default router;

@@ -58,12 +58,12 @@ export const userRegistration = async (req, res) => {
       db.query(sqlSelect, [_id], (err, result) => {
         if (err) return res.status(500).json({ message: err.message });
 
-        const { name, email, role } = result[0];
+        const { name, email, role, full_name } = result[0];
 
         const token = generateJWTWebToken({ _id, name, email, role });
         res.cookie("jwttoken", token, cookiesConfig);
 
-        return res.status(201).json({ message: "User registered Successfully!",user_data:{_id:_id,name:name,email:email,role:role},path:"/" });
+        return res.status(201).json({ message: "User registered Successfully!",user_data:{_id:_id,name:name,email:email,role:role},path:"/",full_name:full_name});
       });
     });
   } catch (error) {
@@ -100,9 +100,9 @@ export const userLogin=(req,res)=>{
         return res.status(400).json({ message: "Verification failed. Please refresh the page." });
   
 
-      const {_id,name,email,role}=userData;
-      res.cookie("jwttoken",generateJWTWebToken({_id:_id,name:name,email:email,role:role}),cookiesConfig);
-      return res.status(201).json({message:"User Verified Successfully!",user_data:{_id:_id,name:name,email:email,role:role}, path:"/"});
+      const {_id,name,email,role,full_name}=userData;
+      res.cookie("jwttoken",generateJWTWebToken({_id:_id,name:name,email:email,role:role, full_name:full_name}),cookiesConfig);
+      return res.status(201).json({message:"User Verified Successfully!",user_data:{_id:_id,name:name,email:email,role:role,full_name:full_name}, path:"/"});
     });
     
   } catch (error) {

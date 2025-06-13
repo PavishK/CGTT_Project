@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react'
-import { data, useLocation } from 'react-router-dom'
+import { data, useLocation, useNavigate } from 'react-router-dom'
 import Sample from '../assets/images/main_page_image.svg';
 import {
   LockKeyhole,
@@ -16,6 +16,7 @@ const GenerateCertificate = React.lazy(() => import('../certificate/GenerateCert
 
 function SelectedCourse() {
     const locationData=useLocation();
+    const navigate=useNavigate(null);
     const [courseData,setCourseData]=useState(locationData.state);
     const [courseTasks,setCourseTasks]=useState([]);
     const [makeLoading,setMakeLoading]=useState(false);
@@ -42,7 +43,7 @@ function SelectedCourse() {
         }
       }
       setUserData(getUserData());
-      setVerifyName(getUserData().name);
+      setVerifyName(getUserData().full_name ?? '');
       setCourseData(locationData.state);
       getCourseTasks();
     },[]);
@@ -76,7 +77,6 @@ function SelectedCourse() {
           try {
             const res=await axios.post(apiUrl+'/api/course/get-certificate-data',{user_id:userData._id,course_id:courseData.id});
             setCertificateData(res.data.data);
-            console.log(res.data.data);
             setDownloadPopup(true);
           } catch (error) {
             toast.error("Unable to download certificate.");
@@ -128,49 +128,80 @@ function SelectedCourse() {
       ))}
       </div>
 
+      {selectedTask.selected && (
       <div className={`${selectedTask.selected?'block':'hidden'}`}>
       <SelectedTask data={selectedTask.data} close={()=>setSelectedTask({selected:false,data:selectedTask.data})}/>
-      </div>
+      </div>)}
 
-    {downloadPopup?(
-        <div className='fixed items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-        <center className=''>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-52'>
-      <div className='flex items-start justify-between w-full'>
-        <div className='flex items-start justify-normal gap-x-1 text-xl font-bold text-blue-500'>
-          <UserCheck size={25}/>
-          <h1>Verify Name</h1>
+      {/* Verify Name Popup */}
+      {downloadPopup && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+          <div className="w-[90%] max-w-md bg-white border rounded-lg p-5 shadow-lg relative mt-32">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-x-2 text-xl font-bold text-blue-500">
+                <UserCheck size={25} />
+                <h1>Verify Name</h1>
+              </div>
+              <XSquareIcon
+                className="text-red-500 cursor-pointer"
+                size={28}
+                onClick={() => setDownloadPopup(false)}
+              />
+            </div>
+            <p className="font-semibold mb-3 text-left text-lg">
+            Check your name before download. Edit anytime from your <span className='text-blue-500 cursor-pointer' onClick={()=>navigate('/profile')}>profile</span>.
+            </p>
+            <input
+              className="w-full p-2 border rounded-lg text-lg uppercase"
+              value={verifyName}
+              name="name"
+              onChange={(e) => setVerifyName(e.target.value)}
+              placeholder="ENTER NAME"
+            />
+            <button
+              className="mt-4 w-full font-bold bg-blue-500 text-white p-2 rounded-lg cursor-pointer"
+              onClick={onConfirmName}
+            >
+              Confirm Name
+            </button>
+          </div>
         </div>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setDownloadPopup(false)}/>
-      </div>
-        <p className='font-semibold text-start mt-3'>Verify the name below before <br/>downloading the certificate.</p>
-        <input className='w-full p-2 border rounded-lg text-lg uppercase' value={verifyName} name='name' onChange={(e)=>setVerifyName(e.target.value)} />
-        <button className='font-bold bg-blue-500 text-white p-2 rounded-lg self-center cursor-pointer mt-2' onClick={onConfirmName}>Confirm Name</button>
-      </div>
-        </center>
-        </div> 
-    ):null}
+      )}
 
-    {SDCertificate?(
-        <div className='fixed items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg overflow-auto p-2'>
-        <center>
-      <div className=' mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-20 '>
-      <div className='flex items-start justify-between w-full pr-20 sm:pr-0'>
-        <div className='flex items-start justify-normal gap-x-1 text-xl font-bold text-blue-500'>
-          <UserCheck size={25}/>
-          <h1>Verify / Download Certificate</h1>
+      {/* Download/View Certificate */}
+      {SDCertificate && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 overflow-auto p-2">
+          <div className="w-[95%] max-w-5xl bg-white border rounded-lg p-5 shadow-lg mt-20 relative">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-x-2 text-xl font-bold text-blue-500">
+                <UserCheck size={25} />
+                <h1>Verify / Download Certificate</h1>
+              </div>
+              <XSquareIcon
+                className="text-red-500 cursor-pointer"
+                size={28}
+                onClick={() => setSDCertificate(false)}
+              />
+            </div>
+            <div className="w-full">
+              <Suspense
+                fallback={
+                  <div className="text-xl animate-pulse text-center py-10">
+                    Loading certificate...
+                  </div>
+                }
+              >
+                <GenerateCertificate
+                  props={{ ...certificateData, name: verifyName, title: courseData.title }}
+                  close={() => setSDCertificate(false)}
+                />
+              </Suspense>
+            </div>
+          </div>
         </div>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setSDCertificate(false)}/>
-      </div>
-      <div className='mr-20 sm:mr-0'>
-        <Suspense fallback={<div className='text-xl animate-pulse flex items-center justify-center w-full h-full'>Loading certificate...</div>}>
-        <GenerateCertificate props={{...certificateData,name:verifyName,title:courseData.title}} close={()=>setSDCertificate(false)}/>
-        </Suspense>
-      </div>
-      </div>
-        </center>
-        </div> 
-    ):null}
+      )}
+
+
       <Loader loading={makeLoading}/>
     </div>
   </>

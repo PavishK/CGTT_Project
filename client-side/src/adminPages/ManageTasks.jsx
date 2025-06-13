@@ -30,9 +30,7 @@ function ManageTasks() {
       try {
         const res=await axios.get(`${apiUrl}/api/admin/get-course-tasks/${courseData.id}`);
         setTasks(res.data.data.reverse());
-        console.log(tasks);
       } catch (error) {
-        console.log(error);
         toast.error("Error in fetching course tasks.");
       } finally{
         setMakeLoading(false);
@@ -110,46 +108,89 @@ function ManageTasks() {
       </div>
     ))}
 
-    {showConfirmPopup?(
-    <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-    <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-    <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setShowConfirmPopup(false)}/>
-      <p className='font-semibold'>Click <span className='text-green-500'>Confirm</span> to remove "{deleteTask.title}".</p>
-      <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={deleteTaskData}>Confirm</button>
-    </div>
-    </div> 
-    ):null}
+    {showConfirmPopup && (
+      <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-center justify-center bg-black/70">
+        <div className="w-[90%] max-w-sm bg-white border rounded-lg p-4 shadow-lg relative">
+          <XSquareIcon
+            className="absolute top-2 right-2 text-red-500 cursor-pointer"
+            size={28}
+            onClick={() => setShowConfirmPopup(false)}
+          />
+          <p className="font-semibold mb-4">
+            Click <span className="text-green-500">Confirm</span> to remove "{deleteTask.title}".
+          </p>
+          <button
+            className="w-full font-bold bg-green-500 text-white p-2 rounded-lg cursor-pointer"
+            onClick={deleteTaskData}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    )}
+
     
-      {showAddNewTask?(
-      <div className='fixed flex items-start justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-28'>
-      <div className='flex items-start justify-between w-full border-b p-2'>
-        <h1 className='flex items-center juno gap-x-1 text-lg font-bold'><PlusCircle className='text-blue-500'/>Add</h1>
-        <XSquareIcon className='text-red-500 cursor-pointer' onClick={()=>setShowAddNewTask(false)}/>
-      </div>
-      <div className='flex items-start justify-normal gap-y-2 flex-col p-2'>
-        <p className='font-semibold'>Adding new task for "{courseData.title}".</p>
-        <div className='flex itst justify-normal flex-col gap-y-2'>
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='title' className='font-semibold'>
-            Title 
-          </label>
-          <input type='text' name='title' required placeholder=' Course name' value={newTask.title} onChange={onInputChangeNewTask}/>
-        </div>
+      {showAddNewTask && (
+        <div className="fixed top-0 left-0 z-[9999] w-screen h-screen flex items-start justify-center bg-black/70">
+          <div className="mt-28 w-[90%] max-w-md bg-white border rounded-lg p-4 shadow-lg relative">
+            <div className="flex items-center justify-between border-b pb-2 mb-3">
+              <h1 className="flex items-center gap-x-2 text-lg font-bold">
+                <PlusCircle className="text-blue-500" />
+                Add
+              </h1>
+              <XSquareIcon
+                className="text-red-500 cursor-pointer"
+                onClick={() => setShowAddNewTask(false)}
+              />
+            </div>
 
-        <div className='flex items-start justify-between gap-x-2'>
-          <label htmlFor='description' className='font-semibold'>
-            Description  
-          </label>
-          <textarea className='w-full focus:outline-0' required name='description' placeholder=' Course description' value={newTask.description} onChange={onInputChangeNewTask}></textarea>
-        </div>
+            <div className="flex flex-col gap-y-4">
+              <p className="font-semibold">
+                Adding new task for "{courseData.title}".
+              </p>
 
+              <div className="flex flex-col gap-y-3">
+                <div className="flex flex-col">
+                  <label htmlFor="title" className="font-semibold mb-1">
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    name="title"
+                    required
+                    placeholder="Course name"
+                    className="border rounded p-2 focus:outline-none"
+                    value={newTask.title}
+                    onChange={onInputChangeNewTask}
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label htmlFor="description" className="font-semibold mb-1">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    required
+                    placeholder="Course description"
+                    className="border rounded p-2 focus:outline-none"
+                    value={newTask.description}
+                    onChange={onInputChangeNewTask}
+                  />
+                </div>
+              </div>
+
+              <button
+                className="self-center bg-green-500 text-white p-2 rounded-lg text-lg font-bold"
+                onClick={addTaskData}
+              >
+                ADD
+              </button>
+            </div>
+          </div>
         </div>
-        <button className='self-center cursor-pointer bg-green-500 p-2 rounded-lg text-lg font-bold text-white' onClick={addTaskData}>ADD</button>
-      </div>
-      </div>
-      </div> 
-      ):null}
+      )}
+
 
 
     </div>

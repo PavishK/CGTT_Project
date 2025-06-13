@@ -9,6 +9,7 @@ export const createUserTable=()=>{
         _id INT AUTO_INCREMENT PRIMARY KEY,
         name VARCHAR(225) NOT NULL,
         email VARCHAR(225) UNIQUE,
+        full_name varchar(20),
         role ENUM('user','admin') DEFAULT 'user',
         password_hash VARCHAR(225) NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -90,5 +91,24 @@ export const createUserTable=()=>{
                 console.log("Unable to create Certificates table!");
             else
                 console.log("Certificates table created successfully!");
+            });
+
+        db.query(`
+            CREATE TABLE IF NOT EXISTS submissions ( 
+            id INT PRIMARY KEY AUTO_INCREMENT, 
+            user_id INT NOT NULL,
+            task_id INT NOT NULL, 
+            file_url VARCHAR(255) NOT NULL, 
+            status ENUM('pending','accepted','rejected') DEFAULT 'pending',
+            reason text, 
+            submited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+            FOREIGN KEY (user_id) REFERENCES users(_id), 
+            FOREIGN KEY (task_id) REFERENCES tasks(id)
+            );
+            `,(err,result)=>{
+            if (err)
+                console.log("Unable to create Submissions table!");
+            else
+                console.log("Submissions table created successfully!");
             });
 } 

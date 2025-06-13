@@ -29,11 +29,11 @@ export const displayAllUsersInfo = async (req, res) => {
         if (flag) {
             const sql = `SELECT _id, name, email, role FROM users`;
             db.query(sql, [], (err, result) => {
-                if (err) throw new Error("Error while executing.");
+                if (err) return res.status(500).json({message:"Error while executing."});
                 return res.status(201).json({ message: "Users data fetched.", data: result });
             });
         } else {
-            throw new Error("Unauthorized access!");
+            return res.status(401).json({message:"Unauthorized access."});
         }
     } catch (error) {
         return res.status(500).json({ message: error.message });
@@ -48,7 +48,7 @@ export const deleteUser=(req,res)=>{
         let sql=`DELETE FROM users WHERE _id=?`;
         db.query(sql,[_id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(201).json({message:'User deleted successfully!'});
         })
     } catch (error) {
@@ -65,7 +65,7 @@ export const updateUser=(req,res)=>{
         let sql=`UPDATE users SET role=? WHERE _id=? and email=?`;
         db.query(sql,[role,_id,email],(err,result)=>{
             if(err)
-                throw new Error("Error while executing!");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(201).json({message:"User data updated successfully!"});
         })
     } catch (error) {
@@ -107,7 +107,8 @@ export const displayCoursesDatas=async(req,res)=>{
 
             db.query(sql,(err,result,fields)=>{
                 if(err)
-                    console.log(err)
+                    return res.status(500).json({message:"Error while executing."});
+                
                 const courses=result[0];
                 const tasksCount=result[1];
                 const enrollmentCount=result[2];
@@ -125,7 +126,7 @@ export const displayCoursesDatas=async(req,res)=>{
             });
         }
         else
-            throw new Error("Unauthorized access!");
+            return res.status(500).json({message:"Error while executing."});
     } catch (error) {
         return res.status(500).json({message:error.message});
     }
@@ -139,7 +140,7 @@ export const deleteCourse=(req,res)=>{
         let sql=`delete from courses where id= ?`;
         db.query(sql,[id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+               return res.status(500).json({message:"Error while executing."});
             return res.status(200).json({message:"Course deleted successfully!"});
         });
     } catch (error) {
@@ -156,7 +157,7 @@ export const updateCourseData=(req,res)=>{
         let sql=`update courses set title= ?, image_url= ?, description= ? where id= ?`;
         db.query(sql,[title,image_url,description,id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(201).json({message:"Course data updated successfully!"});
         })
 
@@ -173,7 +174,7 @@ export const addNewCourse=(req,res)=>{
         let sql=`insert into courses (title,image_url,description) values (?, ?, ?);`;
         db.query(sql,[title,image_url,description],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(201).json({message:"New Course addes successfully."});
         })
     } catch (error) {
@@ -193,7 +194,7 @@ export const displayCourseTasks=(req,res)=>{
         let sql=`select * from tasks where course_id= ?`;
         db.query(sql,[course_id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(200).json({message:"Tasks data fetched!",data:result});
         })
     } catch (error) {
@@ -209,7 +210,7 @@ export const deleteCourseTask=(req,res)=>{
         let sql=`delete from tasks where id= ?;`;
         db.query(sql,[id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(201).json({message:"Course task deleted successfully."});
         })
     } catch (error) {
@@ -226,7 +227,7 @@ export const addNewCourseTask=(req,res)=>{
         let sql=`insert into tasks (title,course_id,description) values (?, ?, ?);`;
         db.query(sql,[title,course_id,description],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
         return res.status(201).json({message:"New Course task created."});
         })
     } catch (error) {
@@ -255,7 +256,7 @@ export const displayEnrollmentsData=async(req,res)=>{
 
             db.query(sql,[],(err,result)=>{
                 if(err)
-                    throw new Error("Error while executing.");
+                    return res.status(500).json({message:"Error while executing."});
                 return res.status(201).json({message:"Enrollment datas fetched!",data:result});
             });            
         }        
@@ -274,7 +275,7 @@ export const deleteEnrollmentData=(req,res)=>{
         let sql=`DELETE FROM enrollments WHERE id=?;`;
         db.query(sql,[id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+                return res.status(500).json({message:"Error while executing."});
             return res.status(201).json({message:"Enrollment data deleted successfully!"});
         })
     } catch (error) {
@@ -292,7 +293,7 @@ export const acceptEnrollment=(req,res)=>{
         `;
         db.query(sql,[new Date(),1,id],(err,result)=>{
             if(err)
-                throw new Error("Error while executing.");
+               return res.status(500).json({message:"Error while executing."});
             return res.status(201).json({message:"Enrollment Accepted!"});
         });
     } catch (error) {
@@ -309,12 +310,12 @@ export const allowCourseCompletion=async(req,res)=>{
     try {
         const {id}=req.body;
         if(!id)
-            throw new Error("Missing Data.");
+            return res.status(400).json({message:"Missing data."});
         let sql=`UPDATE enrollments SET course_completed=?, completed_at=? WHERE id=?;
         SELECT * FROM enrollments WHERE id=?;
         `;
         db.query(sql,[1, new Date(), id, id],async(err,result)=>{
-            if(err) throw new Error("Error while executing.");
+            if(err) return res.status(500).json({message:"Error while executing."});
 
             let sql=`
             INSERT INTO certificates (course_id,user_id,enrollment_id,cid) 
@@ -325,7 +326,7 @@ export const allowCourseCompletion=async(req,res)=>{
             const cid= await generateID(data);
 
             db.query(sql,[data.course_id,data.user_id,data.id,cid],(error,r)=>{
-                if(error) throw new Error("Error while executing.");
+                if(error) return res.status(500).json({message:"Error while executing."});
             return res.status(201).json({message:"Enrollment data updated."});
             });
         });
@@ -336,3 +337,56 @@ export const allowCourseCompletion=async(req,res)=>{
 
 // -X-
 
+//Manage Submissions
+
+export const getSubmissionDatas=async(req,res)=>{
+    try {
+        const {_id,email}=req.params;
+        if(!_id || !email)
+            return res.status(401).json({message:"Un-Authorized access."});
+        const flag=await verifyAdmin({_id, email});
+        if(flag){
+            let sql="SELECT submissions.*, users.name, users.email FROM submissions JOIN users ON users._id=submissions.user_id;";
+            db.query(sql,[],(err,result)=>{
+                if(err)
+                    return res.status(500).json({message:"Error while executing."});
+                return res.status(201).json({message:"Data fetched.",data:result});
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+
+export const deleteSubmissionData=(req,res)=>{
+    try {
+        const {id}=req.params;
+        if(!id)
+            return res.status(400).json({message:"Missing data."});
+        let sql=`DELETE FROM submissions WHERE id=?;`;
+        db.query(sql,[id],(err,result)=>{
+            if(err) return res.status(500).json({message:"Error while executing."});
+            return res.status(200).json({message:"Submission data deleted."});
+        });
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+
+export const updateSubmissionData=(req,res)=>{
+    try {
+        const {id}=req.params;
+        const {status}=req.body;
+        if(!id || !status)
+            return res.status(400).json({message:"Missing data."});
+        let sql=`UPDATE submissions SET status=? WHERE id=?;`;
+        db.query(sql,[status,id],(err,result)=>{
+            if(err) return res.status(500),json({message:"Error while executing."});
+            return res.status(200).json({message:"Status updated successfully."});
+        })
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
