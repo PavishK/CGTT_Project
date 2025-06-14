@@ -15,6 +15,7 @@ import {
 import {toast} from 'react-hot-toast';
 import Loader from '../Loader.jsx';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 const GenerateCertificate = React.lazy(() => import('../certificate/GenerateCertificate'));
 
 function Verify() {
@@ -27,17 +28,6 @@ function Verify() {
   const [downloadVisibility,setDownloadVisibility]=useState(false);
 
   const apiUrl=import.meta.env.VITE_SERVER_API;
-
-  useEffect(()=>{
-
-    const MakeLoading=()=>{
-      setMakeLoading(true);
-      setTimeout(()=>setMakeLoading(false),1000);
-    }
-
-    MakeLoading();
-
-  },[certificateIDFlage]);
 
   const checkCertificate=async()=>{
     if(ID.trim()==='')
@@ -98,10 +88,14 @@ function Verify() {
           </div>
         </div>
 
-        <div className='sm:w-xl w-fit'>
+        <motion.div
+        initial={{ y: -100, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }}     
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="flex-1/2">
           <img src={VerifyImage} className='sm:w-full sm:h-full w-9/12 h-9/12 object-cover '/>
-        </div>
-
+        </motion.div>
+       
     </div>
   ):(
     <div className='flex items-start justify-normal w-full p-2'>

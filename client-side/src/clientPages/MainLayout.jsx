@@ -55,9 +55,9 @@ function MainLayout() {
   }
 
   const onSideNavClicked=()=>{
+    setTimeout(()=>window.location.reload(),10);
     dispatch(setExpanded());
     MakeLoading();
-    window.location.reload();
   }
 
   const MakeNavigationAction=()=>{

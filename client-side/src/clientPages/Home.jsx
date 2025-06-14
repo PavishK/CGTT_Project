@@ -7,6 +7,7 @@ import {
   Medal
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function Home() {
   const navigate=useNavigate(null);
@@ -33,9 +34,14 @@ function Home() {
           </div>
         </div>
 
-        <div className='flex-1/2'>
+        <motion.div
+        initial={{ y: -100, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }}     
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="flex-1/2"
+      >
           <img src={MainImage} className='w-full h-full'/>
-        </div>
+      </motion.div>
 
       </div>
 
