@@ -6,6 +6,7 @@ import SchoolIcon from '@mui/icons-material/School';
 import Loader from '../Loader.jsx';
 import '../index.css';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -31,10 +32,33 @@ function AuthLayout() {
     <div className='flex items-start justify-start p-2 sm:p-4 flex-col sm:flex-row gap-x-2 bg-bglight'>
     <div className='w-full h-screen  rounded-xl border hidden sm:flex items-center justify-center flex-col p-2'>
 
-    <img src={TTLogo} className='w-96 rounded-full p-8 top-0 left-0 absolute cursor-pointer' title='Go Back To Home' onClick={()=>navogate('/')}/>
+ <div className="relative w-full h-full">
+  <motion.div
+    className="absolute top-0 left-0"
+    initial={{ x: -100, opacity: 0 }}
+    animate={{ x: 0, opacity: 1 }}
+    transition={{ duration: 0.8, ease: 'easeOut' }}
+  >
+    <img
+      src={TTLogo}
+      className="w-96 rounded-full p-8 cursor-pointer"
+      title="Go Back To Home"
+      onClick={() => navogate('/')}
+      alt="Logo"
+    />
+  </motion.div>
+</div>
+
     
     <div className='flex items-center justify-center flex-col transition-transform duration-500 ease-in-out hover:-translate-y-3 animate-float mb-14 mt-20'>
-    <img src={Logo} onClick={()=>make()}/>
+      
+      <motion.img
+        drag
+        whileTap={{ scale: 1.01 }}
+        src={Logo}
+        alt="Logo"
+        onClick={()=>make()}
+      />
     </div>
 
 
@@ -50,7 +74,13 @@ function AuthLayout() {
 
   </div>
     <div className='w-full h-screen  rounded-xl border border-black flex items-center justify-normal gap-y-1 sm:gap-y-0 sm:justify-center flex-col'>
-    <img src={TTLogo} className='w-80 rounded-full  sm:hidden cursor-pointer hover:scale-100' title='Go Back To Home' onClick={()=>navogate('/')}/>
+    <motion.div
+        initial={{ y: -100, opacity: 0 }} 
+        animate={{ y: 0, opacity: 1 }}     
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className="w-80 rounded-full  sm:hidden cursor-pointer hover:scale-100">
+        <img src={TTLogo} className='w-80 rounded-full  sm:hidden cursor-pointer hover:scale-100' title='Go Back To Home' onClick={()=>navogate('/')}/>
+        </motion.div>
     <LoginRegister/>
     </div>
     </div>

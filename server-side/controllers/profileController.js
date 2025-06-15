@@ -63,6 +63,7 @@ export const deleteUserData=(req,res)=>{
     }
 }
 
+import { sendOtpToMail } from './EmailController.js';
 
 export const generateOTPForCP=(req,res)=>{
 
@@ -71,11 +72,15 @@ export const generateOTPForCP=(req,res)=>{
         if(!_id || !name ||!email)
             return res.status(400).json({message:"Missing data."});
         let sql=`SELECT * FROM users WHERE _id=? AND name=? AND email=?;`;
-        db.query(sql,[_id,name,email],(err,result)=>{
+        db.query(sql,[_id,name,email],async(err,result)=>{
             if(err) return res.status(500).json({message:"Error while executing."});
             else{
                 const otp=Math.floor(100000+Math.random()*999999);
-                return res.status(200).json({message:"OTP generated.",otp:otp});
+                const flag=await sendOtpToMail(otp,email);
+                if(flag)
+                    return res.status(200).json({message:"OTP generated.",otp:otp});
+                else
+                    return res.status(500).json({message:"Unable to send email."});
             }
         });
     } catch (error) {

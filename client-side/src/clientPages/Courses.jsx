@@ -150,7 +150,7 @@ function Courses() {
       <hr className='w-full mt-4'/>
     <h1 className='text-lg mt-3 font-bold'>Courses List ({coursesData.length})</h1>
 
-    <div className='mt-5 w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-y-4 gap-x-6'>
+    <div className='mt-5 w-full grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-y-4 gap-x-6'>
       {filteredCourseData.map((item,index)=>(
         <div className='border w-auto sm:w-auto h-80 rounded-lg transition-transform ease-out cursor-pointer' key={index} onClick={()=>onClickSelectedCourse(item)}>
       <img src={Sample} className='w-full h-40 bg-gray-100'/>
@@ -161,7 +161,7 @@ function Courses() {
         </div>
       </div>
       <p className='p-1.5 w-auto h-20 overflow-scroll cursor-all-scroll'>{item.description}</p>
-      <div className='p-1.5 flex items-center justify-normal gap-x-1.5 self-end w-auto'>
+      <div className='p-1.5 sm:flex items-center justify-normal gap-x-1.5 self-end w-auto hidden'>
         <GraduationCap/>
         <Lightbulb/>
         <FileText/>

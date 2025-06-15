@@ -64,7 +64,7 @@ function Verify() {
   }
 
   const onEmailIdVerifyClicked=()=>{
-    toast("This feature is available soon.",{icon:<Info size={28} className='text-blue-500'/>})
+    toast("This feature will available soon.",{icon:<Info size={28} className='text-blue-500'/>})
   }
   return (
     <>
@@ -78,11 +78,11 @@ function Verify() {
             <h3 className='font-bold flex items-center justify-normal gap-x-1'>
             <div className='w-3 h-3 bg-black rounded-full'></div>
             Unlock the power of proof</h3>
-            <h1 className='text-5xl sm:text-6xl font-medium text-justify'><b>Ensure</b> authenticity <br></br>in just a few clicks</h1>
+            <h1 className='text-4xl sm:text-6xl font-medium text-justify'><b>Ensure</b> authenticity <br></br>in just a few clicks</h1>
             <p className='mt-2'>Use our secure verification tool to confirm that a certificate issued by our institition is valid. Simple enter the <b>Certificate ID</b> or the <b>registered Email ID</b> to fetch 
             the certificate details instantly. This service is available to employers, institutions, and individuals who want to verify credentials with confidence.</p>
           </div>
-          <div className='flex items-center justify-normal gap-x-4 mt-8'>
+          <div className='flex items-center justify-normal gap-x-4 mt-8 sm:flex-row flex-col gap-y-1.5'>
             <button className='bg-black p-3 rounded-lg text-white transition-transform ease-in-out hover:scale-105 hover:cursor-pointer' onClick={()=>setCertificateIDFlage(false)}>Verify Using Certificate ID</button>
             <button className='border-2 text-black border-black p-2.5  rounded-lg transition-transform ease-in-out hover:scale-105 hover:cursor-pointer' onClick={onEmailIdVerifyClicked}>Verify using Email ID</button>
           </div>

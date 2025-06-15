@@ -17,7 +17,7 @@ import {
   BadgeCheck,
   ShieldCheck,
   User, 
-  HelpCircle,
+  Info,
   UserCog,
   ChevronRight,
 } from "lucide-react";
@@ -42,7 +42,7 @@ function MainLayout() {
     {name:"Certificates",path:'/certificates',icon:<BadgeCheck size={26}/>},
     {name:"Verify Certificates",path:'/verify-certificates',icon:<ShieldCheck size={26}/>},
     {name:"Profile",path:'/profile',icon:<User size={26}/>},
-    {name:"Help",path:'/help',icon:<HelpCircle size={26}/>},
+    {name:"About",path:'/about',icon:<Info size={26}/>},
   ];
 
   const onNavInfoClicked=()=>{
@@ -144,9 +144,9 @@ function MainLayout() {
         )}
       </NavLink>:null}
 
-      <NavLink to="/help">
+      <NavLink to="/about">
         {({ isActive }) => (
-          <SidebarItem icon={<HelpCircle size={20} />} text="Help" active={isActive} />
+          <SidebarItem icon={<Info size={20} />} text="About" active={isActive} />
         )}
       </NavLink>
 
