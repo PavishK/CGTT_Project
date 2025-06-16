@@ -1,5 +1,5 @@
 import React, { useEffect, useState, Suspense } from 'react'
-import { data, useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import Sample from '../assets/images/main_page_image.svg';
 import {
   LockKeyhole,

@@ -13,6 +13,7 @@ import {
     displayCoursesDatas,
     displayCourseTasks, 
     displayEnrollmentsData, 
+    displayTablesCount, 
     getSubmissionDatas, 
     updateCourseData, 
     updateSubmissionData, 
@@ -21,6 +22,8 @@ import {
 
 
 const router=express.Router();
+
+router.get("/get-datas-count/:_id/:email",displayTablesCount);
 
 router.get('/get-users-info/:_id/:email',displayAllUsersInfo);
 router.get('/get-courses-info/:_id/:email',displayCoursesDatas);

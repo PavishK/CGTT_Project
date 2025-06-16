@@ -16,6 +16,34 @@ const verifyAdmin = async (adminData) => {
     });
 };
 
+
+//Dashboard
+
+export const displayTablesCount=async(req,res)=>{
+    try {
+        const {_id,email}=req.params;
+        if(!_id || !email)
+            return res.status(400).json({message:"Missing Data."});
+        const flag= await verifyAdmin({_id,email});
+        if(flag){
+            let sql=`SELECT (SELECT count(*) FROM users) AS users,
+            (SELECT count(*) FROM courses) AS courses,
+            (SELECT count(*) FROM enrollments) AS enrollments,
+            (SELECT count(*) FROM certificates) AS certificates;`;
+
+            db.query(sql,[],(err,result)=>{
+                if(err) return res.status(500).json({message:"Error while executing."});
+                return res.status(200).json({message:"Count fetched.",data:result[0]});
+            });
+        }
+        else
+        return res.status(401).json({message:"Un-Autherized access!"})
+    } catch (error) {
+        return res.status(500).json({message:error.message});
+    }
+}
+
+
 // Manage Users
 
 export const displayAllUsersInfo = async (req, res) => {
