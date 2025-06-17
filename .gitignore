@@ -26,3 +26,4 @@ dist-ssr
 .env
 .env.production
 visualizer_report.html
+node_modules
