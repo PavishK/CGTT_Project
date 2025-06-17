@@ -1,38 +1,48 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import {
   Info,
   BadgeCheck,
 } from 'lucide-react';
-import {motion} from 'framer-motion';
 import ImageO from '../assets/images/about_img.png';
 import './StylePages.css';
 
 function About() {
+
+  const [MotionDiv,setMotionDiv]=useState(null);
+
+    useEffect(()=>{
+      import('framer-motion').then((mod)=>{
+        setMotionDiv(()=>mod.motion.div);
+      })
+    },[]);
+    
+    if(!MotionDiv) return null;
+
   return (
 
     <div className='flex items-start justify-start flex-col p-1 w-full'>
     <div className='flex items-center justify-normal p-3 w-full bg-gray-50 pb-8'>
-    <motion.div
+    <MotionDiv
     initial={{ x: -800, opacity: 0 }} 
     animate={{ x: 0, opacity: 1 }}     
     transition={{ duration: 1.5, ease: 'easeOut' }}
     className='mt-6 flex items-center justify-normal text-4xl sm:text-5xl font-bold w-full'>
       <h1 className='flex gap-x-3.5 flex-wrap'><span><u className='underline-offset-4 decoration-black'>A</u>bout Us</span>-<span className=' bg-gradient-to-r from-green-500 via-blue-500 to-red-500 text-transparent bg-clip-text flex items-start justify-normal'>
       Training Trains </span></h1>
-    </motion.div>
+    </MotionDiv>
     </div>
     <div className='items-center justify-center flex w-full flex-col '>
       <div className='flex items-end justify-normal w-full sm:flex-row flex-col p-2'>
-          <motion.div
+          <MotionDiv
           initial={{ y: 300, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }}     
           transition={{ duration: 1, ease: 'easeOut' }}
           className="flex-1/2">
           <img src={ImageO} className='h-96 w-full object-contain'/>
-          </motion.div>
+          </MotionDiv>
       
 
-          <motion.div
+          <MotionDiv
           initial={{ x: 300, opacity: 0 }} 
           animate={{ x: 0, opacity: 1 }}     
           transition={{ duration: 1.5, ease: 'easeOut' }}
@@ -45,7 +55,7 @@ function About() {
           >
           Learn more
           </button>
-        </motion.div>
+        </MotionDiv>
       </div>
     </div>
   </div>

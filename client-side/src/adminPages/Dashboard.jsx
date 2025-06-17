@@ -1,17 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { getUserData } from '../service/StorageService.jsx';
 import Loader from '../Loader.jsx';
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from 'recharts';
+const PieChartReport=lazy(()=>import('./PieChartReport.jsx'));
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -49,8 +42,6 @@ function Dashboard() {
     { name: 'Enrollments', value: dataCount.enrollments || 0 },
   ];
 
-  const COLORS = ['#4f46e5', '#10b981', '#facc15', '#f97316'];
-
   return (
     <div className='flex items-start justify-normal flex-col px-1 w-full'>
       {/* Metric Cards */}
@@ -86,28 +77,9 @@ function Dashboard() {
       </div>
 
       {/* Pie Chart Section */}
-      <div className="w-full mt-8 bg-white rounded-lg p-4 shadow">
-        <h2 className="text-xl font-semibold mb-4">Overview Pie Chart</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <PieChart>
-            <Pie
-              data={pieData}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              outerRadius={100}
-              label
-            >
-              {pieData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
-      </div>
+      <Suspense fallback={`<div>Loading...</div>`}>
+        <PieChartReport pieData={pieData}/>
+      </Suspense>
 
       <Loader loading={makeLoading} />
     </div>

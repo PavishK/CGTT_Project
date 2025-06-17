@@ -15,7 +15,6 @@ import {
 import {toast} from 'react-hot-toast';
 import Loader from '../Loader.jsx';
 import axios from 'axios';
-import { motion } from 'framer-motion';
 const GenerateCertificate = React.lazy(() => import('../certificate/GenerateCertificate'));
 
 function Verify() {
@@ -27,7 +26,17 @@ function Verify() {
 
   const [downloadVisibility,setDownloadVisibility]=useState(false);
 
+  const [MotionDiv,setMotionDiv]=useState(null);
+
   const apiUrl=import.meta.env.VITE_SERVER_API;
+
+  useEffect(()=>{
+      import('framer-motion').then((mod)=>{
+        setMotionDiv(()=>mod.motion.div);
+      })
+  },[]);
+  
+  if(!MotionDiv) return null;
 
   const checkCertificate=async()=>{
     if(ID.trim()==='')
@@ -88,13 +97,13 @@ function Verify() {
           </div>
         </div>
 
-        <motion.div
+        <MotionDiv
         initial={{ y: -100, opacity: 0 }} 
         animate={{ y: 0, opacity: 1 }}     
         transition={{ duration: 0.8, ease: 'easeOut' }}
         className="flex-1/2">
           <img src={VerifyImage} className='sm:w-full sm:h-full w-9/12 h-9/12 object-cover '/>
-        </motion.div>
+        </MotionDiv>
        
     </div>
   ):(

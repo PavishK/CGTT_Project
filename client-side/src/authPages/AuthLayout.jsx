@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import LoginRegister from './LoginRegister';
 import Logo from '../assets/images/form_logo.png';
 import TTLogo from '../assets/images/ttlogo.png';
-import SchoolIcon from '@mui/icons-material/School';
 import Loader from '../Loader.jsx';
 import '../index.css';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import {
+  GraduationCap
+} from 'lucide-react';
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -63,8 +65,8 @@ function AuthLayout() {
 
 
     <div className="text-center font-nunito">
-  <h2 className="text-2xl font-semibold mb-2 text-textlight">
-  <span><SchoolIcon fontSize='large'/></span>Welcome to Training Trains</h2>
+  <h2 className="text-2xl font-semibold mb-2 text-textlight flex items-start justify-center gap-x-1.5">
+  <span><GraduationCap size={30}/></span>Welcome to Training Trains</h2>
   <p className="text-gray-600 text-base leading-relaxed max-w-xl mx-auto ">
     Join our platform to showcase your skills, upload completed tasks, and earn verified certifications. 
     Whether you're a learner or a professional, easily manage your profile, track progress, and download 
