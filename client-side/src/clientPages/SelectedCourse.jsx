@@ -94,7 +94,7 @@ function SelectedCourse() {
 
     <div className='w-full flex item-start justify-normal flex-col'>
       <div className='h-full flex items-start justify-normal flex-col'>
-        <img src={Sample} className='h-60 w-full object-cover rounded-lg '/>
+        <img src={courseData.image_url} className='h-60 w-full object-cover rounded-lg '/>
         <div className='p-1 w-full flex items-start justify-between flex-col sm:flex-row gap-y-1'>
         <div className='leading-6'>
         <h1 className='capitalize text-2xl font-semibold'>{courseData.title}</h1>
