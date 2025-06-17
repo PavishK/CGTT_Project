@@ -65,7 +65,8 @@ function MainLayout() {
     setSelectedPath(PageNavData.filter((item)=>item.path==currentPath)[0]);
   }
 
-  useEffect(() => {
+useEffect(() => {
+  const debounceTimer = setTimeout(() => {
     const sessionCheck = async () => {
       setMakeLoading(true);
       try {
@@ -73,25 +74,28 @@ function MainLayout() {
           withCredentials: true,
         });
         storeUserData(res.data.user_data);
-        setUserData({...getUserData(),status:true});
-        setMakeLoading(false);
+        setUserData({ ...res.data.user_data, status: true });
       } catch (error) {
-        if(error.status===401){
-          toast.error(error?.response?.data?.message);
+        if (error?.response?.status === 401) {
+          toast.error(error?.response?.data?.message || "Session expired");
         }
         removeUserData();
+      } finally {
         setMakeLoading(false);
       }
     };
 
-    MakeLoading();
-    if(getUserData()!=false){
+    const user = getUserData();
+    if (user !== false) {
       sessionCheck();
     }
-    MakeNavigationAction();
-    
-  }, [location]);
 
+    MakeNavigationAction();
+
+  }, 600);
+
+  return () => clearTimeout(debounceTimer);
+}, [location]);
 
 
   return (
