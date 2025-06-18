@@ -93,7 +93,7 @@ useEffect(() => {
 
     MakeNavigationAction();
 
-  }, 800);
+  }, 1000);
 
   return () => clearTimeout(debounceTimer);
 }, [location]);

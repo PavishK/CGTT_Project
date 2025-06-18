@@ -2,7 +2,7 @@ import db from '../db/dbConnection.js'
 import { hashPassword, verifyPassword } from '../middlewares/passwordMiddleware.js';
 import {generateJWTWebToken} from '../middlewares/JWTMiddleware.js';
 
-const cookiesConfig={httpOnly:true,secure:true,maxAge:2 * 60 * 60 * 1000, signed:true};
+const cookiesConfig={httpOnly:true,secure:true,maxAge:2 * 60 * 60 * 1000, signed:true, sameSite: 'None',};
 
 import axios from 'axios';
 
