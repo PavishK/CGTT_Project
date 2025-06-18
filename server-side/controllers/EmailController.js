@@ -16,10 +16,8 @@ export const sendOtpToMail=async(otp,email)=>{
              </div>`,
     });
 
-    console.log(data);
     return true;
   } catch (error) {
-    console.log(error);
     return false;
   }
 }
