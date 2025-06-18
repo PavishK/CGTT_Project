@@ -58,7 +58,7 @@ function ManageEnrollments() {
       setEnrollmentDatas(enrollmentDatas.filter((val)=>val.id!=deleteEnrollmentData.id));
       toast.success("Enrollment data deleted successfully.");
     } catch (error) {
-      console.log(error)
+      toast.error("Unable to delete enrollment data.");
     } finally{
       setMakeLoading(false);
       setConfirmPopupD(false);
@@ -81,7 +81,7 @@ function ManageEnrollments() {
       setEnrollmentDatas(updatedData);
       toast.success("Enrollment data updated successfully.");
     } catch (error) {
-      console.log(error);
+      toast.error("Unable to accept enrollment.");
     } finally{
       setMakeLoading(false);
       setAllowPopup(false);

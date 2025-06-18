@@ -42,32 +42,39 @@ function AdminMainLayout() {
     navigate(-1);
   }
 
-  useEffect(()=>{
-    const MakeNavigationAction=()=>{
-      let currentPath=window.location.pathname;
-      setSelectedPath(PageNavData.filter((item)=>item.path==currentPath)[0]);
-    }
-    const sessionCheck = async () => {
-      setMakeLoading(true);
-      try {
-        const res = await axios.get(`${apiUrl}/api/protect/session-check`, {
-          withCredentials: true,
-        });
-        storeUserData(res.data.user_data);
-        setUserData({...getUserData(),status:true});
-        setMakeLoading(false);
-      } catch (error) {
-        if(error.status===401){
-          toast.error(error?.response?.data?.message);
-        }
+useEffect(() => {
+  const MakeNavigationAction = () => {
+    const currentPath = window.location.pathname;
+    const selected = PageNavData.find((item) => item.path === currentPath);
+    if (selected) setSelectedPath(selected);
+  };
+
+  const sessionCheck = async () => {
+    setMakeLoading(true);
+    try {
+      const res = await axios.get(`${apiUrl}/api/protect/session-check`, {
+        withCredentials: true,
+      });
+      storeUserData(res.data.user_data);
+      setUserData({ ...res.data.user_data, status: true });
+    } catch (error) {
+      if (error?.response?.status === 401) {
+        toast.error(error?.response?.data?.message || 'Session expired');
         removeUserData();
-        setMakeLoading(false);
         navigate('/');
       }
-    };
+    } finally {
+      setMakeLoading(false);
+    }
+  };
+
+  const user = getUserData();
+  if (user !== false) {
     sessionCheck();
+  }
+
   MakeNavigationAction();
-  },[navigate]);
+}, [navigate]);
 
 
     useEffect(()=>{

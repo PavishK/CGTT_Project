@@ -130,11 +130,10 @@ function Profile() {
     try {
       const res=await axios.post(apiUrl+'/api/profile/change-password-otp',userData);
       toast.success("OTP has been sent successfully.");
-      console.log(res.data.otp);
+      // console.log(res.data.otp);
       setOtp(res.data.otp);
     } catch (error) {
       toast.error("Unable to send OTP.");
-      console.log(error);
     } finally {
       setMakeLoading(false);
     }

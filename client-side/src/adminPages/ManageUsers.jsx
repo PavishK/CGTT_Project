@@ -76,7 +76,6 @@ function ManageUsers() {
       toast.success('User removed successfully.');
     } catch (error) {
       toast.error('Unable to remove the user.');
-      console.log(error);
     } finally{
       setMakeLoading(false);
     }

@@ -23,7 +23,6 @@ function MySubmissions() {
       setMakeLoading(true);
       try {
         const res=await axios.get(`${apiUrl}/api/task/get-user-submissions-data/${getUserData()._id}`);
-        console.log(res.data.data);
         setSubmissionsDatas(res.data.data);
       } catch (error) {
         toast.error("Unable to get submissions data.");

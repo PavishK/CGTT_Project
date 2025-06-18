@@ -104,7 +104,7 @@ function Courses() {
         setEnrolledCourseData(res.data.data)
 
       } catch (error) {
-        console.log(error);
+        console.log("No enrolled courses.");
       }
     }
     }

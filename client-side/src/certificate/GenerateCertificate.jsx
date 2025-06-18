@@ -4,7 +4,6 @@ import './certificateStyle.css';
 import {toast} from 'react-hot-toast';
 
 function GenerateCertificate({props,close}) {
-  console.log("Props" ,props)
   const certificateRef = useRef();
 
   const formatDate=(date)=>{
@@ -20,7 +19,7 @@ function GenerateCertificate({props,close}) {
   toast.success("Download started!");
 
   // Lazy-load jsPDF
-  const jsPDF = await import('jspdf').default;
+  const { jsPDF } = await import('jspdf');
   const html2canvas = (await import('html2canvas')).default;
 
   const canvas = await html2canvas(certificateRef.current, { scale: 2 });
@@ -42,7 +41,7 @@ function GenerateCertificate({props,close}) {
 
   return (
     <>
-    <div className='flex items-center justify-center flex-col gap-y-1'>
+    <div className='flex items-center justify-center flex-col gap-y-1 w-full sm:pl-0 pl-20'>
       <div
         ref={certificateRef}
         className="flex items-center justify-center flex-col border-8 p-5 m-2 bg-gradient-to-b from-[#eff6ff] via-[#ffffff] to-[#dbeafe] w-[800px]"

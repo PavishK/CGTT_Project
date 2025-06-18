@@ -184,7 +184,7 @@ function SelectedCourse() {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-x-2 text-xl font-bold text-blue-500">
                 <UserCheck size={25} />
-                <h1>Verify / Download Certificate</h1>
+                <h1 className='line-clamp-1'>Verify / Download Certificate</h1>
               </div>
               <XSquareIcon
                 className="text-red-500 cursor-pointer"
@@ -192,7 +192,7 @@ function SelectedCourse() {
                 onClick={() => setSDCertificate(false)}
               />
             </div>
-            <div className="w-full">
+            <div className="w-full overflow-auto">
               <Suspense
                 fallback={
                   <div className="text-xl animate-pulse text-center py-10">

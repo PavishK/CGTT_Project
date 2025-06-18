@@ -121,56 +121,81 @@ function Verify() {
       <hr className='w-full mt-6'/>
 
     {certificateData.status?(
-      <div className='w-fit border rounded-lg mt-5'>
-        <div className='flex items-start justify-normal w-full sm:gap-x-2 sm:flex-row flex-col gap-y-1.5 p-2'>
-          <img src={certificateData.image_url} alt={certificateData.title} className='sm:w-96 sm:h-96 object-cover border-r'/>
-        <div className='p-2 flex items-start justify-normal flex-col gap-y-2 w-full'>
-        <h1 className='self-center text-2xl font-bold'>Certificate Details</h1>
+      <div className="w-full max-w-6xl border rounded-lg mt-5 mx-auto overflow-hidden">
+  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4">
+    
+    {/* Certificate Image */}
+    <img
+      src={certificateData.image_url}
+      alt={certificateData.title}
+      className="w-full sm:w-96 sm:h-96 object-cover border sm:border-r rounded-md"
+    />
 
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Name : </h2>
-            <span className='uppercase'>{certificateData.name}</span>
-          </div>
+    {/* Certificate Details */}
+    <div className="flex flex-col gap-4 w-full">
+      <h1 className="text-2xl font-bold text-center sm:text-left">Certificate Details</h1>
 
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Email : </h2>
-            <span className=''>{certificateData.email}</span>
-          </div>
-
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Course Name : </h2>
-            <span className='capitalize'>{certificateData.title}</span>
-          </div>
-
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Duration : </h2>
-            <span className='uppercase'>{formatDate(certificateData.enrolled_at)} - {formatDate(certificateData.completed_at)}</span>
-          </div>
-
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Certification ID : </h2>
-            <span className='uppercase'>{certificateData.cid}</span>
-          </div>
-
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Institute Name : </h2>
-            <span className='capitalize bg-gradient-to-r from-blue-500 bg-clip-text text-transparent to-red-500 font-bold flex items-center justify-normal gap-x-1'>Training Trains <BadgeCheck className='text-green-500'/></span>
-          </div>
-
-          <div className='flex items-start justify-normal text-xl gap-x-6 w-full'>
-            <h2 className='font-bold'>Valid : </h2>
-            {certificateData.is_valid?(
-              <span className='text-green-500 uppercase flex items-start justify-normal gap-x-1.5 font-semibold'>Valid<Check size={25}/></span>
-            ):(
-              <span className='text-red-500 uppercase flex items-start justify-normal gap-x-1.5 font-semibold'>InValid<XIcon size={25}/></span>
-            )}
-          </div>
-
-          <hr className='w-full mt-4'/>
-        <button className='self-center flex items-center justify-normal text-xl gap-x-1 bg-gray-200 p-3 cursor-pointer rounded-lg text-gray-800' onClick={()=>setDownloadVisibility(true)}><Download size={28}/>Download</button>
-        </div>
-        </div>
+      <div className="text-lg flex flex-wrap gap-2">
+        <h2 className="font-semibold">Name:</h2>
+        <span className="uppercase">{certificateData.name}</span>
       </div>
+
+      <div className="text-lg flex flex-wrap gap-2">
+        <h2 className="font-semibold">Email:</h2>
+        <span>{certificateData.email}</span>
+      </div>
+
+      <div className="text-lg flex flex-wrap gap-2">
+        <h2 className="font-semibold">Course Name:</h2>
+        <span className="capitalize">{certificateData.title}</span>
+      </div>
+
+      <div className="text-lg flex flex-wrap gap-2">
+        <h2 className="font-semibold">Duration:</h2>
+        <span className="uppercase">
+          {formatDate(certificateData.enrolled_at)} - {formatDate(certificateData.completed_at)}
+        </span>
+      </div>
+
+      <div className="text-lg flex flex-wrap gap-2">
+        <h2 className="font-semibold">Certification ID:</h2>
+        <span className="uppercase">{certificateData.cid}</span>
+      </div>
+
+      <div className="text-lg flex flex-wrap gap-2 items-center">
+        <h2 className="font-semibold">Institute Name:</h2>
+        <span className="capitalize bg-gradient-to-r from-blue-500 to-red-500 bg-clip-text text-transparent font-bold flex items-center gap-x-1">
+          Training Trains <BadgeCheck className="text-green-500" />
+        </span>
+      </div>
+
+      <div className="text-lg flex flex-wrap gap-2 items-center">
+        <h2 className="font-semibold">Valid:</h2>
+        {certificateData.is_valid ? (
+          <span className="text-green-600 uppercase font-semibold flex items-center gap-1.5">
+            Valid <Check size={20} />
+          </span>
+        ) : (
+          <span className="text-red-500 uppercase font-semibold flex items-center gap-1.5">
+            Invalid <XIcon size={20} />
+          </span>
+        )}
+      </div>
+
+      <hr className="w-full border-t mt-2" />
+
+      {/* Download Button */}
+      <button
+        onClick={() => setDownloadVisibility(true)}
+        className="mt-2 self-center sm:self-start flex items-center gap-2 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg text-gray-800 text-lg transition"
+      >
+        <Download size={24} />
+        Download
+      </button>
+    </div>
+  </div>
+</div>
+
     ):(
 
       <div>
@@ -190,26 +215,41 @@ function Verify() {
     </div>
   )}
 
-    {downloadVisibility?(
-        <div className='fixed items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg overflow-auto p-2'>
-        <center>
-      <div className=' mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg mt-20 '>
-      <div className='flex items-start justify-between w-full pr-20 sm:pr-0'>
-        <div className='flex items-start justify-normal gap-x-1 text-xl font-bold text-blue-500'>
-          <EyeIcon size={25}/>
-          <h1>View / Download Certificate</h1>
+{downloadVisibility && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 overflow-auto p-4">
+    <div className="w-[95%] max-w-5xl bg-white border rounded-lg p-5 shadow-lg mt-20 relative">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-x-2 text-xl font-bold text-blue-500">
+          <EyeIcon size={25} />
+          <h1 className='line'>View / Download Certificate</h1>
         </div>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setDownloadVisibility(false)}/>
+        <XSquareIcon
+          className="text-red-500 cursor-pointer"
+          size={28}
+          onClick={() => setDownloadVisibility(false)}
+        />
       </div>
-      <div className='mr-20 sm:mr-0'>
-      <Suspense fallback={<div className='text-xl animate-pulse flex items-center justify-center w-full h-full'>Loading certificate...</div>}>
-        <GenerateCertificate props={certificateData} close={()=>setDownloadVisibility(false)}/>
-      </Suspense>
+
+      {/* Certificate Content */}
+      <div className="w-full overflow-auto">
+        <Suspense
+          fallback={
+            <div className="text-xl animate-pulse text-center py-10">
+              Loading certificate...
+            </div>
+          }
+        >
+          <GenerateCertificate
+            props={certificateData}
+            close={() => setDownloadVisibility(false)}
+          />
+        </Suspense>
       </div>
-      </div>
-        </center>
-        </div> 
-    ):null}
+    </div>
+  </div>
+)}
+
 
   </div>
   <Loader loading={makeLoading}/>

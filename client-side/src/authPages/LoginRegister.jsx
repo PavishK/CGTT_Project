@@ -79,7 +79,6 @@ function LoginRegister() {
         setMakeLoading(true);
         try {
             const res=await axios.post(api+'/api/user/register',userRegisterData,{withCredentials:true});
-            console.log(res);
             setMakeLoading(false);
             MakeToast('success','Registered successfully!');
             storeUserData(res.data.user_data);

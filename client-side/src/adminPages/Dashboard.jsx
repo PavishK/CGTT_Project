@@ -22,7 +22,6 @@ function Dashboard() {
       try {
         const res = await axios.get(`${apiUrl}/api/admin/get-datas-count/${user._id}/${user.email}`);
         setDataCount(res.data.data);
-        console.log(res.data.data);
       } catch (error) {
         toast.error("Session expired.");
         navigate('/');

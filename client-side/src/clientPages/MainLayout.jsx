@@ -78,8 +78,9 @@ useEffect(() => {
       } catch (error) {
         if (error?.response?.status === 401) {
           toast.error(error?.response?.data?.message || "Session expired");
+          removeUserData();
+          navigate('/');
         }
-        removeUserData();
       } finally {
         setMakeLoading(false);
       }
@@ -92,7 +93,7 @@ useEffect(() => {
 
     MakeNavigationAction();
 
-  }, 600);
+  }, 800);
 
   return () => clearTimeout(debounceTimer);
 }, [location]);
