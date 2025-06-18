@@ -54,18 +54,33 @@ function Home() {
       </div>
 
       <div className='flex items-center justify-center sm:justify-evenly mt-6 flex-col sm:flex-row w-full gap-y-5 p-2'>
-        <div className='flex items-center justify-center flex-col border w-52 p-2 rounded-lg transition-all delay-75 ease-in hover:bg-gray-200 hover:scale-105 hover:border-none'>
+
+        <MotionDiv
+        initial={{ x: -200, opacity: 0,rotate:'200deg' }} 
+        animate={{ x: 0, opacity: 1, rotate:'0deg' }}     
+        transition={{ duration: 1, ease: 'easeOut' }}
+        className='flex items-center justify-center flex-col border w-52 p-2 rounded-lg'>
           <GraduationCap size={65}/>
           <h1 className='text-xl font-bold'>Learn</h1>
-        </div>
-        <div className='flex items-center justify-center flex-col border w-52 p-2 rounded-lg transition-all delay-75 ease-in hover:bg-gray-200 hover:scale-105 hover:border-none'>
-          <TrendingUp size={65}/>
+        </MotionDiv>
+
+        <MotionDiv
+        initial={{ x: -400, opacity: 0, rotate:'180deg' }} 
+        animate={{ x: 0, opacity: 1, rotate:'0deg' }}     
+        transition={{ duration: 1.3, ease: 'easeOut' }}
+        className='flex items-center justify-center flex-col border w-52 p-2 rounded-lg'>
+         <TrendingUp size={65}/>
           <h1 className='text-xl font-bold'>Grow</h1>
-        </div>
-        <div className='flex items-center justify-center flex-col border w-52 p-2 rounded-lg transition-all delay-75 ease-in hover:bg-gray-200 hover:scale-105 hover:border-none'>
+        </MotionDiv>
+
+        <MotionDiv 
+        initial={{ x: -600, opacity: 0, rotate:'90deg' }} 
+        animate={{ x: 0, opacity: 1,  rotate:'0deg' }}     
+        transition={{ duration: 1.6, ease: 'easeOut' }}
+        className='flex items-center justify-center flex-col border w-52 p-2 rounded-lg'>
           <Medal size={65}/>
           <h1 className='text-xl font-bold'>Succeed</h1>
-        </div>
+        </MotionDiv>
       </div>
 
     </div>

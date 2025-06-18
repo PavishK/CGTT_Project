@@ -49,31 +49,37 @@ useEffect(() => {
     if (selected) setSelectedPath(selected);
   };
 
-  const sessionCheck = async () => {
-    setMakeLoading(true);
-    try {
-      const res = await axios.get(`${apiUrl}/api/protect/session-check`, {
-        withCredentials: true,
-      });
-      storeUserData(res.data.user_data);
-      setUserData({ ...res.data.user_data, status: true });
-    } catch (error) {
-      if (error?.response?.status === 401) {
-        toast.error(error?.response?.data?.message || 'Session expired');
-        removeUserData();
-        navigate('/');
+  const debounceTimer = setTimeout(() => {
+    const sessionCheck = async () => {
+      setMakeLoading(true);
+      try {
+        const res = await axios.get(`${apiUrl}/api/protect/session-check`, {
+          withCredentials: true,
+        });
+        storeUserData(res.data.user_data);
+        setUserData({ ...res.data.user_data, status: true });
+      } catch (error) {
+        if (error?.response?.status === 401) {
+          toast.error(error?.response?.data?.message || 'Session expired');
+          removeUserData();
+          navigate('/');
+        }
+      } finally {
+        setMakeLoading(false);
       }
-    } finally {
-      setMakeLoading(false);
+    };
+  
+    const user = getUserData();
+    if (user !== false) {
+      sessionCheck();
     }
-  };
 
-  const user = getUserData();
-  if (user !== false) {
-    sessionCheck();
-  }
+    MakeNavigationAction();
 
-  MakeNavigationAction();
+  },360)
+
+  return ()=>clearTimeout(debounceTimer);
+
 }, [navigate]);
 
 
@@ -95,11 +101,6 @@ useEffect(() => {
 
       fetchAdminData();
     },[]);
-
-      const onSideNavClicked=()=>{
-        dispatch(setExpanded());
-        window.location.reload();
-      }
 
   return (
     <>
@@ -169,15 +170,14 @@ useEffect(() => {
             <Outlet />
           </div>
         </div>
-
-      <div className={`whitespace-nowrap w-auto text-justify mt-96 flex items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden 
-        ${expanded?'block':'hidden'}
-        `} onClick={onSideNavClicked}>
+  {expanded && 
+      <div className={`whitespace-nowrap w-auto text-justify mt-96 -ml-5 flex items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden `}>
         
         {selectedPath.icon}
         {selectedPath.name}  
   
         </div>
+  }
       </div>
       <Loader loading={makeLoading}/>
     </>

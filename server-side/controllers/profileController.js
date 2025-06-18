@@ -1,5 +1,6 @@
 import db from '../db/dbConnection.js';
 import { hashPassword, verifyPassword } from '../middlewares/passwordMiddleware.js';
+import {Buffer} from 'buffer';
 
 export const getUserData=(req,res)=>{
     try {
@@ -75,10 +76,14 @@ export const generateOTPForCP=(req,res)=>{
         db.query(sql,[_id,name,email],async(err,result)=>{
             if(err) return res.status(500).json({message:"Error while executing."});
             else{
-                const otp=Math.floor(100000+Math.random()*999999);
+                const otp = String(Math.floor(100000 + Math.random() * 900000)).padStart(6, '0');
                 const flag=await sendOtpToMail(otp,email);
+
+                //Encrypt
+                const encryptPass= Buffer.from(otp, 'utf-8').toString('base64');
+
                 if(flag)
-                    return res.status(200).json({message:"OTP generated.",otp:otp});
+                    return res.status(200).json({message:"OTP generated.",otp:encryptPass});
                 else
                     return res.status(500).json({message:"Unable to send email."});
             }

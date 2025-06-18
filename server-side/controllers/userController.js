@@ -108,3 +108,52 @@ export const userLogin=(req,res)=>{
   }
 
 }
+
+import { newPassword } from '../middlewares/generatePassword.js';
+import { resetMail } from './EmailController.js';
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { ID } = req.body;
+
+    if (!ID) {
+      return res.status(400).json({ message: "Missing user ID or email." });
+    }
+
+    const sql = `SELECT email FROM users WHERE name = ? OR email = ?;`;
+
+    db.query(sql, [ID, ID], async (err, result) => {
+      if (err) {
+        console.error("SQL Error:", err);
+        return res.status(500).json({ message: "Error while querying the database." });
+      }
+
+      if (result.length === 0) {
+        return res.status(404).json({ message: "No user found with the provided ID or email." });
+      }
+
+      const userEmail = result[0].email;
+      const plainPassword = newPassword();
+      const mailSent = await resetMail(plainPassword, userEmail);
+
+      if (!mailSent) {
+        return res.status(500).json({ message: "Failed to send reset email." });
+      }
+
+      const hashedPassword = await hashPassword(plainPassword);
+      const updateSql = `UPDATE users SET password_hash = ? WHERE email = ?;`;
+
+      db.query(updateSql, [hashedPassword, userEmail], (updateErr) => {
+        if (updateErr) {
+          console.error("Update Error:", updateErr);
+          return res.status(500).json({ message: "Error while updating password." });
+        }
+
+        return res.status(200).json({ message: "Password reset successfully. Please check your email." });
+      });
+    });
+  } catch (error) {
+    console.error("Reset Error:", error);
+    return res.status(500).json({ message: error.message });
+  }
+};

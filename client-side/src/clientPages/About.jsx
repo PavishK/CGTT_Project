@@ -37,7 +37,7 @@ function About() {
           initial={{ y: 300, opacity: 0 }} 
           animate={{ y: 0, opacity: 1 }}     
           transition={{ duration: 1, ease: 'easeOut' }}
-          className="flex-1/2">
+          className="flex-1/2 sm:mt-0 -mt-28">
           <img src={ImageO} className='h-96 w-full object-contain'/>
           </MotionDiv>
       
@@ -57,6 +57,20 @@ function About() {
           </button>
         </MotionDiv>
       </div>
+    </div>
+    <MotionDiv
+    initial={{ x: 1000, opacity: 0, rotate:'200deg' }} 
+    animate={{ x: 0, opacity: 1, rotate:'360deg' }}     
+    transition={{ duration: 1.8, ease: 'easeOut' }} 
+     className='border-t mt-16'>
+      <h1 className='p-2 mt-2 text-xl font-bold bg-gradient-to-br from-black via-gray-500 to-white text-transparent bg-clip-text '>Website created by
+      <u 
+      className='ml-1.5 text-blue-500 cursor-pointer decoration-transparent hover:decoration-black hover:underline-offset-2 text-2xl font-name'
+      >PC</u>.</h1>
+    </MotionDiv>
+
+    <div className='self-end border-t w-full mt-10 text-center p-2 text-sm'>
+    <p>@ 2025 Training Trains, all rights reserved.</p>
     </div>
   </div>
   )

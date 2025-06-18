@@ -5,7 +5,7 @@ const MAX_RESEND = 3;
 const COOLDOWN_TIME = 40; // seconds
 const RESET_INTERVAL = 8 * 60 * 60 * 1000; 
 
-export default function OTPComponent({ onSubmit }) {
+export default function OTPComponent({ onSubmit, resend }) {
   const formRef = useRef(null);
   const [resendCount, setResendCount] = useState(0);
   const [resendDisabled, setResendDisabled] = useState(false);
@@ -120,7 +120,7 @@ export default function OTPComponent({ onSubmit }) {
 
   const handleResend = () => {
   const MAX_RESEND_COUNT = 4;
-  const COOLDOWN_PERIOD = 30 * 1000; // 30 seconds
+  const COOLDOWN_PERIOD = 80 * 1000; // 80 seconds
   const now = Date.now();
 
   const stored = getOTPLimit() || {};
@@ -151,8 +151,11 @@ export default function OTPComponent({ onSubmit }) {
   setResendMessage(`OTP resent (${newInfo.count}/${MAX_RESEND_COUNT})`);
   setCooldown(COOLDOWN_PERIOD / 1000); // in seconds
 
-  // Optional: trigger OTP API resend
+  if (typeof resend === 'function') {
+    resend();
+  }
 };
+
 
 
   return (

@@ -4,12 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import Loader from '../Loader';
 import { storeUserData } from '../service/StorageService';
+import {
+    RotateCcw,
+    XSquareIcon
+} from 'lucide-react';
 
 function LoginRegister() {
     const [loginData, setLoginData] = useState({ userID: '', password: '' });
     const [registerData, setRegisterData] = useState({ name: '', email: '', password: '', confirm_password: '' });
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showRegisterPassword, setShowRegisterPassword] = useState(false);
+
+    const [FpPopup,setFpPopup]=useState(false);
+    const [forgotInput,setForgotInput]=useState('');
 
     const [toggleForm, setToggleForm] = useState(true);
     const [makeLoading,setMakeLoading]=useState(false);
@@ -69,25 +76,53 @@ function LoginRegister() {
         loginDataHandler();
     }
 
-    // Register 
-    const onRegisterInputChange = (e) => {
-        setRegisterData({ ...registerData, [e.target.name]: e.target.value });
+    //Forgot password
+    const onForgotPassClicked=()=>{
+        setFpPopup(true);
     }
 
-    const registerDataHandler=async()=>{
-        const userRegisterData={...registerData,...{turnstileToken:token}}
+    const handleForgotPassword = async () => {
+    if (!forgotInput.trim()) {
+        toast.error("Please enter your User ID or Email");
+        return;
+    }
+
+    else{
         setMakeLoading(true);
         try {
-            const res=await axios.post(api+'/api/user/register',userRegisterData,{withCredentials:true});
+            await axios.post(api+'/api/user/reset-user-password',{ID:forgotInput});
+            setForgotInput('');
+            toast.success("Password reset email sent.");
+            setFpPopup(false);
             setMakeLoading(false);
-            MakeToast('success','Registered successfully!');
-            storeUserData(res.data.user_data);
-            navigate(res.data.path);
-        } catch (error) {
+        } catch (err) {
+            toast.error(err.response.data.message);
             setMakeLoading(false);
-            MakeToast('error',error.response.data.message);
         }
     }
+
+};
+
+        // Register 
+        const onRegisterInputChange = (e) => {
+            setRegisterData({ ...registerData, [e.target.name]: e.target.value });
+        }
+
+        const registerDataHandler=async()=>{
+            const userRegisterData={...registerData,...{turnstileToken:token}}
+            setMakeLoading(true);
+            try {
+                const res=await axios.post(api+'/api/user/register',userRegisterData,{withCredentials:true});
+                setMakeLoading(false);
+                MakeToast('success','Registered successfully!');
+                storeUserData(res.data.user_data);
+                navigate(res.data.path);
+            } catch (error) {
+                setMakeLoading(false);
+                MakeToast('error',error.response.data.message);
+            }
+        }
+
 
     const onRegisterFormSubmit = (e) => {
         e.preventDefault();
@@ -171,7 +206,7 @@ function LoginRegister() {
                         <input className='w-full sm:w-[470px] p-2 rounded-lg text-lg border-textlight border-2' type={showLoginPassword ? 'text' : 'password'} name='password' placeholder='Enter your password' value={loginData.password} onChange={handleLoginInputChange}  id='password' autoComplete='current-password' required />
                         <div className='w-full sm:w-[470px] flex items-center justify-between flex-row sm:text-lg'>
                             <p><input type='checkbox' checked={showLoginPassword} onChange={(e) => setShowLoginPassword(e.target.checked)} /> Show password</p>
-                            <p className='text-gray-500 cursor-pointer hover:text-gray-400'>Forgot password?</p>
+                            <p className='text-gray-500 cursor-pointer hover:text-gray-400' onClick={onForgotPassClicked}>Forgot password?</p>
                         </div>
 
                         {/* Shared Turnstile Widget */}
@@ -220,6 +255,43 @@ function LoginRegister() {
                     </form>
                 </div>
             )}
+
+    {FpPopup && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+    <div className="w-[90%] max-w-md bg-white border rounded-lg p-5 shadow-lg relative mt-32">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-x-2 text-xl font-bold text-blue-500">
+          <RotateCcw size={25} />
+          <h1>Forgot Password</h1>
+        </div>
+        <XSquareIcon
+          className="text-red-500 cursor-pointer"
+          size={28}
+          onClick={() => setFpPopup(false)}
+        />
+      </div>
+      <p className="font-semibold mb-3 text-left text-lg">
+        Enter your <span className="text-blue-500">User ID</span> or <span className="text-blue-500">Email</span> to reset your password.
+      </p>
+
+      <input
+        type="text"
+        value={forgotInput}
+        onChange={(e) => setForgotInput(e.target.value)}
+        placeholder="User ID or Email"
+        className="w-full p-2 border rounded-lg text-lg"
+      />
+
+      <button
+        onClick={handleForgotPassword}
+        className="mt-4 w-full font-bold bg-blue-500 text-white p-2 rounded-lg cursor-pointer hover:bg-blue-600"
+      >
+        Send Reset Password
+      </button>
+    </div>
+  </div>
+)}
+
 
             <Loader loading={makeLoading}/>
         </>

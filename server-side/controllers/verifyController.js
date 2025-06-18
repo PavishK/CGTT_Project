@@ -6,7 +6,7 @@ export const verifyCertificate=(req,res)=>{
         if(!cid)
             return res.status(401).json({message:"Missing certificate ID."});
         let sql=`
-        SELECT enrollments.*, certificates.ref, certificates.is_valid, certificates.cid, users.name, users.email, courses.image_url, courses.title
+        SELECT enrollments.*, certificates.ref, certificates.is_valid, certificates.cid, users.name, users.email, users.full_name, courses.image_url, courses.title
         FROM certificates JOIN enrollments ON certificates.enrollment_id=enrollments.id 
         JOIN users ON users._id=enrollments.user_id JOIN courses ON courses.id=certificates.course_id WHERE certificates.cid=?;
         `;

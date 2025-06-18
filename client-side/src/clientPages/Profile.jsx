@@ -42,7 +42,9 @@ function Profile() {
 
   const [errorMessage,setErrorMessage]=useState(false);
   const [userConfirmation,setUserConfirmation]=useState('');
+
   const apiUrl=import.meta.env.VITE_SERVER_API;
+  const otpKey=import.meta.env.VITE_XOR_OTP_KEY;
 
   useEffect(()=>{
     const fetchProfileData=async()=>{
@@ -130,8 +132,8 @@ function Profile() {
     try {
       const res=await axios.post(apiUrl+'/api/profile/change-password-otp',userData);
       toast.success("OTP has been sent successfully.");
-      // console.log(res.data.otp);
-      setOtp(res.data.otp);
+      setOtp(window.atob(res.data.otp));
+      setChangePasswordPopup(true);
     } catch (error) {
       toast.error("Unable to send OTP.");
     } finally {
@@ -163,7 +165,6 @@ const ShowPopup = () => {
     });
 
     generateOTP();
-    setChangePasswordPopup(true);
   };
 
   const OtpHandler = (OTP) => {
@@ -182,7 +183,7 @@ const ShowPopup = () => {
     }
 
     //Compare OTP
-    const isCorrectOTP = Number(OTP) === Otp;
+    const isCorrectOTP = Number(OTP) === Number(Otp);
 
     if (isCorrectOTP) {
       toast.success('OTP Verified Successfully!');
@@ -340,7 +341,7 @@ const ShowPopup = () => {
       >
         <XSquareIcon size={24} />
       </button>
-      <OTPComponent onSubmit={OtpHandler} />
+      <OTPComponent onSubmit={OtpHandler} resend={()=>generateOTP()}/>
     </div>
   </div>
 )}

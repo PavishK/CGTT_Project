@@ -132,12 +132,17 @@ function Verify() {
     />
 
     {/* Certificate Details */}
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex flex-col gap-2.5 w-full">
       <h1 className="text-2xl font-bold text-center sm:text-left">Certificate Details</h1>
 
       <div className="text-lg flex flex-wrap gap-2">
-        <h2 className="font-semibold">Name:</h2>
+        <h2 className="font-semibold">User Name:</h2>
         <span className="uppercase">{certificateData.name}</span>
+      </div>
+
+      <div className="text-lg flex flex-wrap gap-2">
+        <h2 className="font-semibold">Full Name:</h2>
+        <span className="uppercase">{certificateData.full_name}</span>
       </div>
 
       <div className="text-lg flex flex-wrap gap-2">

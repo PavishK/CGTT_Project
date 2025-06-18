@@ -49,17 +49,6 @@ function MainLayout() {
     navigate(-1);
   }
 
-  const MakeLoading=()=>{
-    setMakeLoading(true);
-    setTimeout(()=>{setMakeLoading(false)},1000);
-  }
-
-  const onSideNavClicked=()=>{
-    setTimeout(()=>window.location.reload(),10);
-    dispatch(setExpanded());
-    MakeLoading();
-  }
-
   const MakeNavigationAction=()=>{
     let currentPath="/"+window.location.pathname.split('/')[1];
     setSelectedPath(PageNavData.filter((item)=>item.path==currentPath)[0]);
@@ -182,8 +171,7 @@ useEffect(() => {
         </div>
 
         {expanded &&         
-        <div className={`w-auto text-justify mt-96 flex -ml-5 items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden
-        `} onClick={onSideNavClicked}>
+        <div className={`w-auto text-justify mt-96 flex -ml-5 items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden`}>
         
         {selectedPath.icon}
         {selectedPath.name}  
