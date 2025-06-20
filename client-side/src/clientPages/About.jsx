@@ -66,6 +66,7 @@ function About() {
       <h1 className='p-2 mt-2 text-xl font-bold bg-gradient-to-br from-black via-gray-500 to-white text-transparent bg-clip-text '>Website created by
       <u 
       className='ml-1.5 text-blue-500 cursor-pointer decoration-transparent hover:decoration-black hover:underline-offset-2 text-2xl font-name'
+      onClick={() => window.open("https://personal-portfolio-rdxc.onrender.com", "_blank", "width=900,height=800")}
       >PC</u>.</h1>
     </MotionDiv>
 
