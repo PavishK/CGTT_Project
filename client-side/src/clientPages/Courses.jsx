@@ -218,48 +218,81 @@ function Courses() {
 
      {/* Login Popup */}
 
-      {formPopup?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <div className=' flex items-start justify-between w-full'>
-      <div className='flex items-start justify-normal gap-x-1 text-green-600'>
-      <DoorOpen size={28}/>
-      <span className='text-2xl font-bold'>Login / Register</span>
+{formPopup && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+    <div className="relative w-[95%] max-w-lg bg-white p-6 rounded-xl shadow-2xl border">
+      <button
+        onClick={() => setFormPopup(false)}
+        className="absolute top-3 right-3 text-red-500 hover:text-red-600 cursor-pointer"
+        aria-label="Close popup"
+      >
+        <XSquareIcon size={24} />
+      </button>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 text-green-600">
+          <DoorOpen size={28} />
+          <span className="text-2xl font-bold">Login / Register</span>
+        </div>
+        <p className="text-center text-gray-600">
+          Every journey begins with a step.
+        </p>
+        <img src={Sample} alt="sample" className="w-full h-auto rounded-lg" />
+        <button
+          onClick={() => navigate('/user-login_register')}
+          className="bg-green-500 text-white py-2 px-4 rounded-lg font-bold hover:underline self-center"
+        >
+          Login / Register
+        </button>
       </div>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setFormPopup(false)}/>
-      </div>
-      <p className='w-full text-center text-gray-600'>Every journey begins with a step.</p>
-        <img src={Sample} className='w-96 h-fit'/>
-        <button className='font-bold bg-green-500 text-white p-2 rounded-lg self-center cursor-pointer hover:underline' onClick={()=>navigate('/user-login_register')}>Login / Register</button>
-      </div>
-      </div> 
-      ):null}
+    </div>
+  </div>
+)}
+
 
       {/* Enroll Popup */}
 
-      {enrollPopup?(
-      <div className='fixed flex items-center justify-center w-full h-full transition-opacity duration-300 bg-black/70 rounded-lg'>
-      <div className='mr-20 sm:mr-0 flex items-start justify-normal flex-col text-lg gap-y-2 w-fit bg-white p-3 border rounded-lg'>
-      <div className=' flex items-start justify-between w-full'>
-      <div className='flex items-start justify-normal gap-x-1 text-blue-600'>
-      <BookOpen size={28}/>
-      <span className='text-2xl font-bold'>Request Enrollment </span>
+      {enrollPopup && (
+  <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70">
+    <div className="relative w-[95%] max-w-lg bg-white p-6 rounded-xl shadow-2xl border">
+      <button
+        onClick={() => setEnrollPopup(false)}
+        className="absolute top-3 right-3 text-red-500 hover:text-red-600 cursor-pointer"
+        aria-label="Close popup"
+      >
+        <XSquareIcon size={24} />
+      </button>
+
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 text-blue-600">
+          <BookOpen size={28} />
+          <span className="text-2xl font-bold">Request Enrollment</span>
+        </div>
+
+        <div className="flex items-center gap-2 text-lg text-gray-700">
+          <span>Certificate</span>
+          <span>|</span>
+          <span className="capitalize font-medium">{enrollmentData.title}</span>
+        </div>
+
+        <hr className="border-gray-300" />
+
+        <p className="text-gray-700 font-semibold text-sm leading-relaxed">
+          [Note: Enrollment approval may take a few days. <br />
+          Check back daily for updates.]
+        </p>
+
+        <button
+          onClick={EnrollmentRequest}
+          className="bg-blue-500 text-white py-2 px-4 rounded-lg font-bold hover:underline self-center"
+        >
+          Enroll
+        </button>
       </div>
-      <XSquareIcon className='self-end text-red-500 cursor-pointer' size={28} onClick={()=>setEnrollPopup(false)}/>
-      </div>
-      <div className='p-2.5 flex items-start justify-normal flex-row gap-x-1.5 w-full text-lg'>
-      <h2>Certificate</h2>
-      <span>|</span>
-      <span className='capitalize'>
-      {enrollmentData.title}
-      </span>
-      </div>
-      <hr className='w-full'/>
-      <p className='font-semibold'>[Note: Enrollment approval may take a few days. <br/> Check back daily for updates.]</p>
-        <button className='font-bold bg-blue-500 text-white p-2 rounded-lg self-center cursor-pointer' onClick={EnrollmentRequest}>Enroll</button>
-      </div>
-      </div> 
-      ):null}
+    </div>
+  </div>
+)}
+
      <Loader loading={makeLoading}/>
   </div>  
   )
