@@ -13,7 +13,7 @@ const db=mysql.createConnection({
     port:process.env.DBPORT,
     multipleStatements:true,
     ssl:{
-        rejectUnauthorized:true,
+        rejectUnauthorized:process.env.SSLSTATE,
     }
 });
 

@@ -111,10 +111,10 @@ function ManageEnrollments() {
   }
   return (
     <>
+      <div className={`text-xl font-semibold ${!enrollmentDatas.length==0?'hidden':'block'}`}>
+        <h1>No enrollments☺️.</h1>
+      </div>
     <div className='flex items-start justify-normal overflow-x-scroll w-full p-2 rounded-lg'>
-      {/* <div className={`text-xl font-semibold ${usersData.length>0?'hidden':'block'}`}>
-        <h1>No users other then you☺️.</h1>
-      </div> */}
       <table className={`w-full`}>
       <tbody>
           <tr className='flex items-start justify-between border-b p-2 font-bold gap-x-8 text-lg'>
