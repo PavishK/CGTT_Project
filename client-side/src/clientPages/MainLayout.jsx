@@ -171,10 +171,10 @@ useEffect(() => {
         </div>
 
         {expanded &&         
-        <div className={`w-auto text-justify mt-96 flex -ml-5 items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden`}>
+        <div className={`w-auto text-justify flex mt-96  -ml-5 items-center justify-center rotate-90 gap-x-1.5 text-2xl sm:hidden`}>
         
         {selectedPath.icon}
-        {selectedPath.name}  
+        <span className='text-nowrap'>{selectedPath.name} </span> 
   
         </div>
         }
