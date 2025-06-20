@@ -36,10 +36,7 @@ export default function Sidebar({ children, user_data }) {
   }
 
   const onClickUser=()=>{
-    dispatch(setExpanded());
-    setExpandedAction(
-      !false
-    );
+    setExpandedAction(true);
   }
 
   const onLogOutClicked=async()=>{

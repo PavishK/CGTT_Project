@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import timestamp from './time_stamp.js';
+
 //DB Handler
 import db from './db/dbConnection.js'
 
@@ -26,7 +26,7 @@ app.get('/',(req,res)=>{
 });
 
 app.listen(port,()=>{
-    timestamp(port);
+    console.log("\x1b[32m"+"Server running on port "+port+"\x1b[0m");
 });
 
 //User Handeling

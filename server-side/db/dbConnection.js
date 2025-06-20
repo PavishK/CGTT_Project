@@ -12,13 +12,18 @@ const db=mysql.createConnection({
     database:process.env.DATABASE,
     port:process.env.DBPORT,
     multipleStatements:true,
+    ssl:{
+        rejectUnauthorized:true,
+    }
 });
 
 db.connect((err)=>{
-    if(err)
+    if(err){
         console.log("Error Connecting MySqL DataBase!");
+        console.log(err);
+    }
     else{
-        console.log("MySqL DataBase Connected Successfully!");
+        console.log("\x1b[32m"+"MySqL DataBase Connected Successfully!"+"\x1b[0m");
         createUserTable();
     }
         

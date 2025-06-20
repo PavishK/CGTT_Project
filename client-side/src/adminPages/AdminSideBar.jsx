@@ -35,10 +35,7 @@ export default function AdminSideBar({ children, user_data }) {
   }
 
   const onClickUser=()=>{
-        dispatch(setExpanded());
-    setExpandedAction(
-      true
-    );
+        setExpandedAction(true);
   }
 
   const onLogOutClicked=async()=>{
