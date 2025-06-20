@@ -38,7 +38,7 @@ function Home() {
           </div>
           <div className='flex items-center justify-normal gap-x-4 mt-8'>
             <button className='bg-black p-3 rounded-lg text-white transition-transform ease-in-out hover:scale-105 hover:cursor-pointer' onClick={()=>navigate('/courses')}>Explore Course</button>
-            <button className='border-2 text-black border-black p-2.5  rounded-lg transition-transform ease-in-out hover:scale-105 hover:cursor-pointer'>Learn More</button>
+            <button className='border-2 text-black border-black p-2.5  rounded-lg transition-transform ease-in-out hover:scale-105 hover:cursor-pointer' onClick={()=>navigate('/about')}>Learn More</button>
           </div>
         </div>
 
