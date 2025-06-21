@@ -12,7 +12,7 @@ A web-based application that allows training institutions to generate and verify
 - 🌐 Responsive UI for desktop and mobile users
 
 ## 📷 Screenshots
-
+![image](https://github.com/user-attachments/assets/315fa038-40fe-4565-82c0-365879b9b8d2)
 
 ## 🚀 Tech Stack
 
