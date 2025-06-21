@@ -194,11 +194,11 @@ function Courses() {
       <hr className='w-full mt-6'/>
 
       <h1 className='text-lg mt-3 font-bold'>Enrolled Courses ({enrolledCourseData.length})</h1>
-      <div className='mt-5 w-full grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-3 gap-y-4 gap-x-6'>
+      <div className='mt-5 w-full grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-y-4 gap-x-6'>
       {enrolledCourseData.map((item,index)=>(
 
-      <div className={`border w-auto sm:w-auto h-72 rounded-lg transition-transform ease-out ${item.enrollment_status?'cursor-pointer':'cursor-wait bg-gray-100'}`} key={index} onClick={()=>onEnrolledCourseClicked(item)}>
-      <img src={Sample} className='w-full h-40 bg-gray-100'/>
+      <div className={`border w-auto sm:w-auto h-80 rounded-lg ${item.enrollment_status?'cursor-pointer':'cursor-wait bg-gray-100'}`} key={index} onClick={()=>onEnrolledCourseClicked(item)}>
+      <img src={item.image_url} className='w-full h-40 bg-gray-100'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>
         <div className={`p-1 rounded-full text-white ${item.enrollment_status?'bg-green-400':'bg-yellow-400'}`}>

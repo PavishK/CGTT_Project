@@ -76,7 +76,7 @@ useEffect(() => {
 
     MakeNavigationAction();
 
-  },360)
+  },80)
 
   return ()=>clearTimeout(debounceTimer);
 

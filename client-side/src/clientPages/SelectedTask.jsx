@@ -119,7 +119,7 @@ const onSubmitTask=async()=>{
           <div className='w-full flex items-start justify-between flex-col sm:flex-row gap-y-3 p-2'>
            <div className='w-full sm:w-sm p-4 font-semibold rounded-lg text-lg border flex items-start justify-normal sm:gap-x-1.5 sm:flex-row flex-col gap-y-1'>
             <label className='whitespace-nowrap'>File link:</label>
-            <input type='text' disabled={submitedData.flag} value={fileLink} name='fileLink' placeholder='Past the file link here.' className={`${submitedData.status?'text-blue-500 underline overflow-auto':''} cursor-auto h-8 w-fit rounded-lg text-lg `} onChange={(e)=>setFileLink(e.target.value)} />
+            <input type='text' disabled={submitedData.flag} value={fileLink} name='fileLink' placeholder='  Past the file link here.' className={`${submitedData.status?'text-blue-500 underline overflow-auto':''} cursor-auto h-10 w-full rounded-lg text-lg `} onChange={(e)=>setFileLink(e.target.value)} />
            </div>
            {submitedData.flag && (
             <div className='flex items-center justify-normal gap-y-0.5 flex-col text-lg w-full'>

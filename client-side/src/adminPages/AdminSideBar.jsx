@@ -44,14 +44,13 @@ export default function AdminSideBar({ children, user_data }) {
       const res=await axios.post(apiUrl+"/api/protect/session-log-out",{},{withCredentials:true});
       toast.success(res.data.message);
       removeUserData();
+      navigate('/');
       setTimeout(()=>window.location.reload(),800);
       setMakLoading(false);
-      navigate('/');
     } catch (error) {
       toast.error("Error logging out. Please try again.");
       setMakLoading(false);
     }
-    
   }
 
   return (
