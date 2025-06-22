@@ -19,10 +19,10 @@ export const sendOtpToMail = async (otp, toEmail) => {
       subject: 'Your OTP Code - Password Change Verification',
       html: `
        <div style="background-color: #1f1f1f; color: #f2f2f2; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 40px 20px; text-align: center; border-radius: 12px; max-width: 600px; margin: auto; box-shadow: 0 4px 12px rgba(0,0,0,0.4);">
-    <img src="https://training.trainingtrains.com/images/logo/jtp_logo.png" alt="CGTT Logo" style="width: 160px; background-color: #ffffff; border-radius: 10px; margin-bottom: 25px; padding: 8px;" />
+    <img src="https://training.trainingtrains.com/images/logo/jtp_logo.png" alt="Training Trains Logo" style="width: 160px; background-color: #ffffff; border-radius: 10px; margin-bottom: 25px; padding: 8px;" />
     <h1 style="font-size: 26px; color: #ffffff; margin-bottom: 16px;">Password Reset Request</h1>
     <p style="font-size: 16px; color: #e0e0e0; margin-bottom: 25px;">
-      We received a request to reset the password for your CGTT account. Please use the code below to proceed.
+      We received a request to reset the password for your Training Trains account. Please use the code below to proceed.
     </p>
     <div style="display: inline-block; background: #ffffff; color: #000000; padding: 16px 32px; font-size: 26px; font-weight: bold; letter-spacing: 2px; border-radius: 10px; margin-bottom: 25px;">
       ${otp}
@@ -64,7 +64,7 @@ export const resetMail = async (password, email) => {
       html: `
         <div style="max-width:600px;margin:auto;font-family:Arial,sans-serif;border:1px solid #ddd;padding:30px;border-radius:10px;background:#fff;color:#000">
           <div style="text-align:center;margin-bottom:30px;">
-            <img src="https://training.trainingtrains.com/images/logo/jtp_logo.png" alt="Logo" style="height:100px; width:200px;" />
+            <img src="https://training.trainingtrains.com/images/logo/jtp_logo.png" alt="Training TrainsLogo" style="height:100px; width:200px;" />
           </div>
 
           <h2 style="color:#000;text-align:center;margin-bottom:20px">Password Reset Successful</h2>
@@ -74,7 +74,7 @@ export const resetMail = async (password, email) => {
           </p>
 
           <p style="font-size:16px;margin-bottom:20px">
-            A new password has been generated for your account. Please use the following password to log in:
+            A new password has been generated for your Training Trains account. Please use the following password to log in:
           </p>
 
           <div style="background:#000;color:#fff;padding:15px;border-radius:5px;text-align:center;font-size:18px;font-weight:bold;letter-spacing:1px">

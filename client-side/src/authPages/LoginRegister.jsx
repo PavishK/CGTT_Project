@@ -238,7 +238,9 @@ function LoginRegister() {
                         </div>
 
                         {/* Shared Turnstile Widget */}
-                        <div ref={turnstileRef} className='w-full sm:w-[470px]'></div>
+                        <div className='flex items-center justify-center w-full sm:w-[470px]'>
+                        <div ref={turnstileRef} className='w-full self-center'></div>
+                        </div>
 
                         <button
                             type="submit"
