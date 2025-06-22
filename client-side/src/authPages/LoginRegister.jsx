@@ -134,11 +134,13 @@ function LoginRegister() {
             return;
         }
 
-        if(!/^[a-zA-Z][a-zA-Z0-9_]{4,}$/.test(registerData.name)){
-            MakeToast('error','Invalid name format!');
+        if (!/^[a-zA-Z]{5,}$/.test(registerData.name)) {
+            MakeToast('error', 'Invalid name format! Only letters allowed and minimum 5 characters.');
             setMakeLoading(false);
             return;
         }
+
+
 
         if(/^S+@\S.\S+$/.test(registerData.email)){
             MakeToast('error','Invalid email format!');
