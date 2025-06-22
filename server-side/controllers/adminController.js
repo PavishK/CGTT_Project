@@ -406,11 +406,11 @@ export const deleteSubmissionData=(req,res)=>{
 export const updateSubmissionData=(req,res)=>{
     try {
         const {id}=req.params;
-        const {status}=req.body;
+        const {status,reason}=req.body;
         if(!id || !status)
             return res.status(400).json({message:"Missing data."});
-        let sql=`UPDATE submissions SET status=? WHERE id=?;`;
-        db.query(sql,[status,id],(err,result)=>{
+        let sql=`UPDATE submissions SET status=?, reason=? WHERE id=?;`;
+        db.query(sql,[status, reason, id],(err,result)=>{
             if(err) return res.status(500),json({message:"Error while executing."});
             return res.status(200).json({message:"Status updated successfully."});
         })

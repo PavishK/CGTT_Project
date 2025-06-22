@@ -140,8 +140,6 @@ function LoginRegister() {
             return;
         }
 
-
-
         if(/^S+@\S.\S+$/.test(registerData.email)){
             MakeToast('error','Invalid email format!');
             setMakeLoading(false);

@@ -16,6 +16,7 @@ function ManageSubmissions() {
   const [editPopup,setEditPopup]=useState(false);
   const [editData,setEditData]=useState({});
   const [changeStatus,setChangeStatus]=useState('pending');
+  const [rejectedReason,setRejectedReason]=useState("");
 
   const apiUrl = import.meta.env.VITE_SERVER_API;
   const statusColor={pending:"text-yellow-500",rejected:"text-red-500",accepted:"text-green-500"}
@@ -85,17 +86,22 @@ function ManageSubmissions() {
 
   const EditSubmission=async()=>{
     setMakeLoading(true);
-    try {
-      await axios.put(`${apiUrl}/api/admin/update-submission-data/${editData.id}`,{status:changeStatus});
-      const updateData=[...submissionDatas];
-      updateData[editData.index].status=changeStatus;
-      setSubmissionDatas(updateData);
-      toast.success("Submission status updated successfully.")
-    } catch (error) {
-      toast.error("Unable to update submission status.");
-    } finally {
-      setEditPopup(false);
-      setMakeLoading(false);
+    if(changeStatus==="rejected" && rejectedReason===""){
+      toast.error("Please specify the reason for rejection.");
+    }
+    else{
+      try {
+        await axios.put(`${apiUrl}/api/admin/update-submission-data/${editData.id}`,{status:changeStatus,reason:rejectedReason});
+        const updateData=[...submissionDatas];
+        updateData[editData.index].status=changeStatus;
+        setSubmissionDatas(updateData);
+        toast.success("Submission status updated successfully.")
+      } catch (error) {
+        toast.error("Unable to update submission status.");
+      } finally {
+        setEditPopup(false);
+        setMakeLoading(false);
+      }
     }
   }
   return (
@@ -214,6 +220,19 @@ function ManageSubmissions() {
                 <option value="rejected">rejected</option>
               </select>
             </label>
+
+          {changeStatus==="rejected" &&(
+            <label className="font-bold w-full">
+              Reason for rejection:
+              <textarea type='text'
+              value={rejectedReason}
+              name='reason' 
+              placeholder='Specify the reason for rejection.'
+              className="w-full mt-1 border p-2 rounded resize-none"
+              onChange={(e)=>setRejectedReason(e.target.value)}
+              />
+            </label>
+          )}
 
             <button
               className="self-center bg-blue-500 text-white p-2 rounded-lg text-lg font-bold"
