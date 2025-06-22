@@ -81,7 +81,7 @@ export const createUserTable=()=>{
             enrollment_id INT,
             is_valid BOOLEAN DEFAULT TRUE,
             issued_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            cid VARCHAR(25) UNIQUE, 
+            cid VARCHAR(225) UNIQUE, 
             FOREIGN KEY (user_id) REFERENCES users(_id),
             FOREIGN KEY (course_id) REFERENCES courses(id),
             FOREIGN KEY (enrollment_id) REFERENCES enrollments(id)

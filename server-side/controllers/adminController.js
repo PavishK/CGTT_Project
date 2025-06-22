@@ -330,66 +330,56 @@ export const acceptEnrollment=(req,res)=>{
 }
 
 // Certificate ID Generator
-const generateID = (data) => {
-    const cid = `tt-${data.user_id}0${data.course_id}0${data.id}-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000) + 1000}`;
+const generateID = async (data) => {
+    const cid = `tt-${data.user_id}x${data.course_id}x${data.id}-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000) + 1000}`;
     return cid;
 };
 
-export const allowCourseCompletion = (req, res) => {
-    const { id } = req.body;
+// Main Controller Function
+export const allowCourseCompletion = async (req, res) => {
+    try {
+        const { id } = req.body;
+        if (!id)
+            return res.status(400).json({ message: "Missing data." });
 
-    if (!id) {
-        return res.status(400).json({ message: "Missing enrollment ID." });
-    }
-
-    // Step 1: Update enrollments
-    const updateSql = `UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?`;
-    db.query(updateSql, [1, new Date(), id], (updateErr, updateResult) => {
-        if (updateErr) {
-            console.error("Update error:", updateErr);
-            return res.status(500).json({ message: "Error updating enrollment." });
-        }
-
-        if (updateResult.affectedRows === 0) {
-            return res.status(404).json({ message: "Enrollment not found." });
-        }
-
-        // Step 2: Select enrollment data
-        const selectSql = `SELECT * FROM enrollments WHERE id = ?`;
-        db.query(selectSql, [id], (selectErr, selectResult) => {
-            if (selectErr) {
-                console.error("Select error:", selectErr);
-                return res.status(500).json({ message: "Error retrieving enrollment." });
+        // First query: UPDATE enrollments
+        const updateSql = `UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?`;
+        db.query(updateSql, [1, new Date(), id], (updateErr, updateResult) => {
+            if (updateErr) {
+                return res.status(500).json({ message: "Error during update." });
             }
 
-            if (selectResult.length === 0) {
-                return res.status(404).json({ message: "Enrollment not found after update." });
-            }
-
-            const data = selectResult[0];
-            const cid = generateID(data);
-            console.log("Generated CID:", cid);
-
-            // Step 3: Insert into certificates
-            const insertSql = `
-                INSERT INTO certificates (course_id, user_id, enrollment_id, cid)
-                VALUES (?, ?, ?, ?)
-            `;
-            db.query(insertSql, [data.course_id, data.user_id, data.id, cid], (insertErr, insertResult) => {
-                if (insertErr) {
-                    console.error("Certificate insert error:", insertErr);
-                    return res.status(500).json({ message: "Error inserting certificate." });
+            // Second query: SELECT updated enrollment row
+            const selectSql = `SELECT * FROM enrollments WHERE id = ?`;
+            db.query(selectSql, [id], async (selectErr, selectResult) => {
+                if (selectErr || selectResult.length === 0) {
+                    return res.status(500).json({ message: "Error retrieving enrollment data." });
                 }
 
-                return res.status(201).json({
-                    message: "Certificate created successfully.",
-                    cid: cid
+                const data = selectResult[0];
+
+                // Generate Certificate ID
+                const cid = await generateID(data);
+
+                // Third query: INSERT certificate
+                const insertSql = `
+                    INSERT INTO certificates (course_id, user_id, enrollment_id, cid)
+                    VALUES (?, ?, ?, ?)
+                `;
+                db.query(insertSql, [data.course_id, data.user_id, data.id, cid], (insertErr, insertResult) => {
+                    if (insertErr) {
+                        return res.status(500).json({ message: "Error inserting certificate." });
+                    }
+
+                    return res.status(201).json({ message: "Enrollment data updated and certificate generated." });
                 });
             });
         });
-    });
-};
 
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+};
 
 // -X-
 
