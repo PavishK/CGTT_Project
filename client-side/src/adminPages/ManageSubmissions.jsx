@@ -85,11 +85,11 @@ function ManageSubmissions() {
   }
 
   const EditSubmission=async()=>{
-    setMakeLoading(true);
     if(changeStatus==="rejected" && rejectedReason===""){
       toast.error("Please specify the reason for rejection.");
     }
     else{
+      setMakeLoading(true);
       try {
         await axios.put(`${apiUrl}/api/admin/update-submission-data/${editData.id}`,{status:changeStatus,reason:rejectedReason});
         const updateData=[...submissionDatas];
