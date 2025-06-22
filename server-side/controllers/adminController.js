@@ -330,37 +330,47 @@ export const acceptEnrollment=(req,res)=>{
 }
 
 // Certificate ID Generator
-const generateID = async (data) => {
+const generateID = (data) => {
     const cid = `tt-${data.user_id}0${data.course_id}0${data.id}-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000) + 1000}`;
     return cid;
 };
 
-// Certificate Aproval
-export const allowCourseCompletion = async (req, res) => {
-    try {
-        const { id } = req.body;
-        if (!id)
-            return res.status(400).json({ message: "Missing data." });
+export const allowCourseCompletion = (req, res) => {
+    const { id } = req.body;
 
-        const sql = `
-            UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?;
-            SELECT * FROM enrollments WHERE id = ?;
-        `;
+    if (!id) {
+        return res.status(400).json({ message: "Missing enrollment ID." });
+    }
 
-        db.query(sql, [1, new Date(), id, id], async (err, results) => {
-            if (err) {
-                console.error("Error in combined query:", err);
-                return res.status(500).json({ message: "Error during update/select." });
+    // Step 1: Update enrollments
+    const updateSql = `UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?`;
+    db.query(updateSql, [1, new Date(), id], (updateErr, updateResult) => {
+        if (updateErr) {
+            console.error("Update error:", updateErr);
+            return res.status(500).json({ message: "Error updating enrollment." });
+        }
+
+        if (updateResult.affectedRows === 0) {
+            return res.status(404).json({ message: "Enrollment not found." });
+        }
+
+        // Step 2: Select enrollment data
+        const selectSql = `SELECT * FROM enrollments WHERE id = ?`;
+        db.query(selectSql, [id], (selectErr, selectResult) => {
+            if (selectErr) {
+                console.error("Select error:", selectErr);
+                return res.status(500).json({ message: "Error retrieving enrollment." });
             }
 
-            const data = results[1][0]; // Second result (index 1), first row
-
-            if (!data) {
-                return res.status(404).json({ message: "Enrollment not found." });
+            if (selectResult.length === 0) {
+                return res.status(404).json({ message: "Enrollment not found after update." });
             }
 
-            const cid = await generateID(data);
+            const data = selectResult[0];
+            const cid = generateID(data);
+            console.log("Generated CID:", cid);
 
+            // Step 3: Insert into certificates
             const insertSql = `
                 INSERT INTO certificates (course_id, user_id, enrollment_id, cid)
                 VALUES (?, ?, ?, ?)
@@ -371,14 +381,13 @@ export const allowCourseCompletion = async (req, res) => {
                     return res.status(500).json({ message: "Error inserting certificate." });
                 }
 
-                return res.status(201).json({ message: "Enrollment updated and certificate generated." });
+                return res.status(201).json({
+                    message: "Certificate created successfully.",
+                    cid: cid
+                });
             });
         });
-
-    } catch (error) {
-        console.error("Unexpected error:", error);
-        return res.status(500).json({ message: error.message });
-    }
+    });
 };
 
 
