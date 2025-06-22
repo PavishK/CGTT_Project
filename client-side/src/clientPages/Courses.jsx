@@ -153,7 +153,7 @@ function Courses() {
     <div className='mt-5 w-full grid grid-cols-1 sm:grid-cols-[repeat(auto-fit,minmax(300px,1fr))]  gap-y-4 gap-x-6'>
       {filteredCourseData.map((item,index)=>(
         <div className='border w-auto sm:w-auto h-80 rounded-lg transition-transform ease-out cursor-pointer' key={index} onClick={()=>onClickSelectedCourse(item)}>
-      <img src={item.image_url} className='w-full h-40 bg-gray-100'/>
+      <img src={item.image_url} className='w-full h-40 bg-gray-100 object-contain'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>
         <div className={`p-1 rounded-full text-white bg-red-400`}>
@@ -198,7 +198,7 @@ function Courses() {
       {enrolledCourseData.map((item,index)=>(
 
       <div className={`border w-auto sm:w-auto h-80 rounded-lg ${item.enrollment_status?'cursor-pointer':'cursor-wait bg-gray-100'}`} key={index} onClick={()=>onEnrolledCourseClicked(item)}>
-      <img src={item.image_url} className='w-full h-40 bg-gray-100'/>
+      <img src={item.image_url} className='w-full h-40 bg-gray-100 object-contain'/>
       <div className='p-1.5 flex items-center justify-between'>
         <h1 className='text-xl capitalize font-bold'>{item.title}</h1>
         <div className={`p-1 rounded-full text-white ${item.enrollment_status?'bg-green-400':'bg-yellow-400'}`}>

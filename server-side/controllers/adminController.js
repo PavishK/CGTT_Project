@@ -329,39 +329,58 @@ export const acceptEnrollment=(req,res)=>{
     }
 }
 
-const generateID=async(data)=>{
-     var cid=`tt-${data.user_id}0${data.course_id}0${data.id}-${new Date().getFullYear()}-${Math.floor(Math.random()*9000)+1000}`;
-     return cid;
-}
+// Certificate ID Generator
+const generateID = async (data) => {
+    const cid = `tt-${data.user_id}0${data.course_id}0${data.id}-${new Date().getFullYear()}-${Math.floor(Math.random() * 9000) + 1000}`;
+    return cid;
+};
 
-export const allowCourseCompletion=async(req,res)=>{
+// Main Controller Function
+export const allowCourseCompletion = async (req, res) => {
     try {
-        const {id}=req.body;
-        if(!id)
-            return res.status(400).json({message:"Missing data."});
-        let sql=`UPDATE enrollments SET course_completed=?, completed_at=? WHERE id=?;
-        SELECT * FROM enrollments WHERE id=?;
-        `;
-        db.query(sql,[1, new Date(), id, id],async(err,result)=>{
-            if(err) return res.status(500).json({message:"Error while executing."});
+        const { id } = req.body;
+        if (!id)
+            return res.status(400).json({ message: "Missing data." });
 
-            let sql=`
-            INSERT INTO certificates (course_id,user_id,enrollment_id,cid) 
-            VALUES (?, ?, ?, ?);`;
+        // First query: UPDATE enrollments
+        const updateSql = `UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?`;
+        db.query(updateSql, [1, new Date(), id], (updateErr, updateResult) => {
+            if (updateErr) {
+                return res.status(500).json({ message: "Error during update." });
+            }
 
-            //Generate Certificate ID
-            const data=result[1][0];
-            const cid= await generateID(data);
+            // Second query: SELECT updated enrollment row
+            const selectSql = `SELECT * FROM enrollments WHERE id = ?`;
+            db.query(selectSql, [id], async (selectErr, selectResult) => {
+                if (selectErr || selectResult.length === 0) {
+                    return res.status(500).json({ message: "Error retrieving enrollment data." });
+                }
 
-            db.query(sql,[data.course_id,data.user_id,data.id,cid],(error,r)=>{
-                if(error) return res.status(500).json({message:"Error while executing."});
-            return res.status(201).json({message:"Enrollment data updated."});
+                const data = selectResult[0];
+
+                // Generate Certificate ID
+                const cid = await generateID(data);
+
+                // Third query: INSERT certificate
+                const insertSql = `
+                    INSERT INTO certificates (course_id, user_id, enrollment_id, cid)
+                    VALUES (?, ?, ?, ?)
+                `;
+                db.query(insertSql, [data.course_id, data.user_id, data.id, cid], (insertErr, insertResult) => {
+                    if (insertErr) {
+                        return res.status(500).json({ message: "Error inserting certificate." });
+                    }
+
+                    return res.status(201).json({ message: "Enrollment data updated and certificate generated." });
+                });
             });
         });
+
     } catch (error) {
-        return res.status(500).json({message:error.message});
+        return res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 // -X-
 

@@ -129,7 +129,7 @@ function ManageCourses() {
       <div className={`flex items-start justify-normal flex-col gap-y-3`}>
       {coursesData.map((val,i)=>(
         <div className='flex items-start justify-normal border rounded-lg flex-row gap-x-2 h-48 w-full overflow-x-auto overflow-y-hidden' key={i}>
-          <img src={val?.image_url || Sample} alt={val.title} className='sm:w-56 h-48 w-36 border-r'/>
+          <img src={val?.image_url} alt={val.title} className='sm:w-56 h-48 w-36 border-r object-contain'/>
           <div className='flex items-start justify-normal flex-col gap-y-1.5 p-0.5 cursor-pointer' onClick={()=>onSelectCourse(val)}>
             <h1 className='text-xl font-bold capitalize'>{val.title}</h1>
             <p className='text-justify h-14 overflow-y-scroll sm:w-5xl cursor-all-scroll'>{val.description}</p>
