@@ -70,6 +70,7 @@ useEffect(() => {
           removeUserData();
           navigate('/');
         }
+        setMakeLoading(false);
       } finally {
         setMakeLoading(false);
       }

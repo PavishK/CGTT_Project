@@ -12,7 +12,8 @@ import {
   Home,
   UserPlus,
   ChevronRight,
-  ClipboardEditIcon
+  ClipboardEditIcon,
+  Flashlight
 } from 'lucide-react';
 
 import axios from 'axios';
@@ -64,6 +65,7 @@ useEffect(() => {
           removeUserData();
           navigate('/');
         }
+        setMakeLoading(false);
       } finally {
         setMakeLoading(false);
       }
