@@ -128,7 +128,7 @@ function Verify() {
     <img
       src={certificateData.image_url}
       alt={certificateData.title}
-      className="w-full sm:w-96 sm:h-96 object-cover border sm:border-r rounded-md"
+      className="w-full sm:w-96 sm:h-96 object-contain border sm:border-r rounded-md"
     />
 
     {/* Certificate Details */}
