@@ -335,48 +335,48 @@ const generateID = async (data) => {
     return cid;
 };
 
-// Main Controller Function
+// Certificate Aproval
 export const allowCourseCompletion = async (req, res) => {
     try {
         const { id } = req.body;
         if (!id)
             return res.status(400).json({ message: "Missing data." });
 
-        // First query: UPDATE enrollments
-        const updateSql = `UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?`;
-        db.query(updateSql, [1, new Date(), id], (updateErr, updateResult) => {
-            if (updateErr) {
-                return res.status(500).json({ message: "Error during update." });
+        const sql = `
+            UPDATE enrollments SET course_completed = ?, completed_at = ? WHERE id = ?;
+            SELECT * FROM enrollments WHERE id = ?;
+        `;
+
+        db.query(sql, [1, new Date(), id, id], async (err, results) => {
+            if (err) {
+                console.error("Error in combined query:", err);
+                return res.status(500).json({ message: "Error during update/select." });
             }
 
-            // Second query: SELECT updated enrollment row
-            const selectSql = `SELECT * FROM enrollments WHERE id = ?`;
-            db.query(selectSql, [id], async (selectErr, selectResult) => {
-                if (selectErr || selectResult.length === 0) {
-                    return res.status(500).json({ message: "Error retrieving enrollment data." });
+            const data = results[1][0]; // Second result (index 1), first row
+
+            if (!data) {
+                return res.status(404).json({ message: "Enrollment not found." });
+            }
+
+            const cid = await generateID(data);
+
+            const insertSql = `
+                INSERT INTO certificates (course_id, user_id, enrollment_id, cid)
+                VALUES (?, ?, ?, ?)
+            `;
+            db.query(insertSql, [data.course_id, data.user_id, data.id, cid], (insertErr, insertResult) => {
+                if (insertErr) {
+                    console.error("Certificate insert error:", insertErr);
+                    return res.status(500).json({ message: "Error inserting certificate." });
                 }
 
-                const data = selectResult[0];
-
-                // Generate Certificate ID
-                const cid = await generateID(data);
-
-                // Third query: INSERT certificate
-                const insertSql = `
-                    INSERT INTO certificates (course_id, user_id, enrollment_id, cid)
-                    VALUES (?, ?, ?, ?)
-                `;
-                db.query(insertSql, [data.course_id, data.user_id, data.id, cid], (insertErr, insertResult) => {
-                    if (insertErr) {
-                        return res.status(500).json({ message: "Error inserting certificate." });
-                    }
-
-                    return res.status(201).json({ message: "Enrollment data updated and certificate generated." });
-                });
+                return res.status(201).json({ message: "Enrollment updated and certificate generated." });
             });
         });
 
     } catch (error) {
+        console.error("Unexpected error:", error);
         return res.status(500).json({ message: error.message });
     }
 };
